@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Running Pace Converter | Convert Pace, Speed, min/km, min/mile</title>
-  <meta name="description" content="Convert running pace and speed instantly. Type a speed or pace to see km/h, mph, min/km, min/mile, and projected 5K, 10K, half-marathon, and marathon finish times." />
-  <meta name="keywords" content="running pace converter, pace calculator, min per km to mph, min per mile to kmh, running speed converter, 5k pace calculator" />
+  <title>Running Pace Converter | Fast, Simple Pace, VDOT, GAP, Splits</title>
+  <meta name="description" content="A fast, simple running pace converter with minimal clicks. Instantly calculate min/km, min/mi, km/h, mph, race predictions, VDOT equivalents, grade-adjusted pace, and visual splits." />
+  <meta name="keywords" content="running pace converter, pace calculator, vdot calculator, grade adjusted pace, race splits calculator, running speed converter, 5k pace calculator, marathon pace calculator" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#fafafa" />
   <meta name="application-name" content="Running Pace Converter" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Running Pace Converter" />
-  <meta property="og:description" content="Convert pace and speed instantly across km/h, mph, min/km, min/mile, and race finish projections." />
+  <meta property="og:title" content="Running Pace Converter | Fast, Simple Pace, VDOT, GAP, Splits" />
+  <meta property="og:description" content="A fast, simple running tool with minimal clicks for pace conversion, race predictions, VDOT, grade-adjusted pace, and split tables." />
   <meta property="og:site_name" content="Running Pace Converter" />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Running Pace Converter" />
-  <meta name="twitter:description" content="Type a speed or pace and instantly see every major running conversion plus projected race times." />
+  <meta name="twitter:title" content="Running Pace Converter | Fast, Simple Pace, VDOT, GAP, Splits" />
+  <meta name="twitter:description" content="A fast, simple running pace site with minimal clicks for conversions, race predictions, VDOT, grade-adjusted pace, and splits." />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -23,7 +23,7 @@
       "name": "Running Pace Converter",
       "applicationCategory": "SportsApplication",
       "operatingSystem": "Any",
-      "description": "Convert running pace and speed instantly across km/h, mph, min/km, min/mile, and projected race finish times.",
+      "description": "A fast, simple running pace site with minimal clicks for converting pace and speed, projecting race times, comparing VDOT, calculating grade-adjusted pace, and viewing splits.",
       "offers": {
         "@type": "Offer",
         "price": "0",
@@ -387,6 +387,15 @@
       color: #fff7f2;
       border-color: rgba(194, 65, 12, 0.72);
       box-shadow: 0 10px 20px rgba(194, 65, 12, 0.14);
+    }
+
+    .unit-rail-hint {
+      display: none;
+      margin-left: auto;
+      font-size: 0.76rem;
+      color: var(--muted-light);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
     }
 
     .chips {
@@ -1183,6 +1192,10 @@
         transform: translate(2px, 1px);
       }
 
+      .chips {
+        display: none;
+      }
+
       .results,
       .projection-content {
         grid-template-columns: 1fr;
@@ -1195,6 +1208,14 @@
 
       .projection-summary {
         align-items: flex-start;
+      }
+    }
+
+    @media (min-width: 901px) {
+      .unit-rail-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
       }
     }
   </style>
@@ -1222,7 +1243,6 @@
       </div>
 
       <h1>One input. Every pace.</h1>
-      <p>Type a speed or pace.</p>
     </div>
 
     <div class="input-wrap">
@@ -1230,7 +1250,7 @@
         <div class="panel-inner">
           <div class="input-row">
             <span class="leading-icon">↔</span>
-            <input id="paceInput" class="pace-input" value="4:30 /km" placeholder="Try 4:30 /km or 8.2 mph" />
+            <input id="paceInput" class="pace-input" value="4:30/km" placeholder="Try 4:30/km or 8.2 mph" />
             <button id="clearBtn" class="ghost-btn" aria-label="Clear input">
               <span class="reset-icon">⟲</span>
             </button>
@@ -1242,6 +1262,7 @@
             <button class="unit-pill" type="button" data-unit-target="minPerMile">min/mi</button>
             <button class="unit-pill" type="button" data-unit-target="kmh">km/h</button>
             <button class="unit-pill" type="button" data-unit-target="mph">mph</button>
+            <span class="unit-rail-hint" aria-hidden="true">Tab switches units</span>
           </div>
 
           <div class="chips" id="chips"></div>
@@ -1405,8 +1426,8 @@
 
   <script>
     const EXAMPLES = [
-      "4:30 /km",
-      "7:15 /mi",
+      "4:30/km",
+      "7:15/mi",
       "13.3 km/h",
       "8.2 mph",
       "4.5 min/km",
@@ -1458,6 +1479,7 @@
 
     let selectedVdotRace = "5K";
     let selectedSplitRace = "5K";
+    let hasAutoSelectedInput = false;
     const dividerGameState = {
       active: false,
       rafId: 0,
@@ -1740,16 +1762,16 @@
       }
       switch (parsed.type) {
         case "kmh":
-          helperText.textContent = "Detected speed in kilometers per hour.";
+          helperText.textContent = "";
           return;
         case "mph":
-          helperText.textContent = "Detected speed in miles per hour.";
+          helperText.textContent = "";
           return;
         case "minPerKm":
-          helperText.textContent = "Detected pace in minutes per kilometer.";
+          helperText.textContent = "";
           return;
         case "minPerMile":
-          helperText.textContent = "Detected pace in minutes per mile.";
+          helperText.textContent = "";
           return;
       }
     }
@@ -2201,6 +2223,14 @@
       input.focus();
     });
 
+    input.addEventListener("focus", () => {
+      if (hasAutoSelectedInput) return;
+      hasAutoSelectedInput = true;
+      window.requestAnimationFrame(() => {
+        input.select();
+      });
+    });
+
     unitRail.querySelectorAll("[data-unit-target]").forEach((button) => {
       button.addEventListener("click", () => {
         input.value = applyUnitToRawInput(input.value, button.dataset.unitTarget);
@@ -2214,6 +2244,18 @@
     });
 
     input.addEventListener("input", render);
+    input.addEventListener("keydown", (event) => {
+      if (event.key !== "Tab") return;
+
+      const unitButtons = Array.from(unitRail.querySelectorAll("[data-unit-target]"));
+      const activeIndex = unitButtons.findIndex((button) => button.classList.contains("is-active"));
+      const currentIndex = activeIndex >= 0 ? activeIndex : -1;
+      const direction = event.shiftKey ? -1 : 1;
+      const nextIndex = (currentIndex + direction + unitButtons.length) % unitButtons.length;
+
+      event.preventDefault();
+      unitButtons[nextIndex].click();
+    });
     gapGradeInput.addEventListener("input", render);
     splitBiasInput.addEventListener("input", render);
     window.addEventListener("keydown", (event) => {
