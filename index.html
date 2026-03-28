@@ -363,13 +363,6 @@
       color: var(--muted-light);
     }
 
-    .projection-title {
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--accent);
-    }
-
     .projection-subtitle {
       font-size: 0.9rem;
       color: var(--muted);
@@ -420,11 +413,6 @@
       font-weight: 600;
       letter-spacing: -0.03em;
       color: var(--accent);
-    }
-
-    .projection-note {
-      font-size: 0.85rem;
-      color: var(--muted);
     }
 
     .projection-empty {
@@ -545,7 +533,6 @@
       <summary class="projection-summary">
         <div class="projection-copy">
           <div class="projection-eyebrow">Race Projections</div>
-          <div class="projection-title">Expected finish times</div>
           <div class="projection-subtitle" id="projectionSubtitle">Expand to see 5K, 10K, half-marathon, and marathon estimates.</div>
         </div>
         <span class="panel-chevron" aria-hidden="true">⌄</span>
@@ -572,10 +559,10 @@
     ];
 
     const RACES = [
-      { label: "5K", distanceKm: 5, note: "A sharp check-in on current speed." },
-      { label: "10K", distanceKm: 10, note: "Useful for threshold-focused efforts." },
-      { label: "Half Marathon", distanceKm: 21.0975, note: "A steady benchmark for endurance." },
-      { label: "Marathon", distanceKm: 42.195, note: "Best read as an even-pace projection." },
+      { label: "5K", distanceKm: 5 },
+      { label: "10K", distanceKm: 10 },
+      { label: "Half Marathon", distanceKm: 21.0975 },
+      { label: "Marathon", distanceKm: 42.195 },
     ];
 
     const input = document.getElementById("paceInput");
@@ -723,7 +710,6 @@
               <div class="projection-distance">${race.label}</div>
               <div class="projection-time">${secondsToClock(totalSeconds)}</div>
             </div>
-            <div class="projection-note">${race.note}</div>
           </article>
         `;
       }).join("");
@@ -766,6 +752,14 @@
     }
 
     function hydrateInputFromQuery() {
+      const rawSearch = window.location.search.startsWith("?")
+        ? window.location.search.slice(1)
+        : window.location.search;
+      if (rawSearch && !rawSearch.includes("=")) {
+        input.value = decodeURIComponent(rawSearch.replace(/\+/g, " "));
+        return;
+      }
+
       const params = new URLSearchParams(window.location.search);
       const seededValue = params.get("q") || params.get("pace") || params.get("value");
       if (seededValue) {
@@ -802,6 +796,10 @@
 
     hydrateInputFromQuery();
     render();
+    window.requestAnimationFrame(() => {
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+    });
   </script>
 </body>
 </html>
