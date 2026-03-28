@@ -43,6 +43,9 @@
       --accent: #fc5200;
       --accent-strong: #c2410c;
       --accent-soft: #fff1e7;
+      --danger-soft: #fff2f2;
+      --danger-border: #f0b7b7;
+      --danger-text: #b34b4b;
       --shadow: 0 18px 60px rgba(143, 63, 18, 0.09);
     }
 
@@ -269,7 +272,48 @@
       display: grid;
       gap: 16px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-bottom: 16px;
+      margin-bottom: 0;
+    }
+
+    .section-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 30px 0 26px;
+      color: rgba(188, 143, 115, 0.9);
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: "";
+      flex: 1;
+      max-width: 180px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(252, 82, 0, 0), rgba(252, 82, 0, 0.28), rgba(252, 82, 0, 0));
+    }
+
+    .section-divider-dots {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-divider-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(252, 82, 0, 0.44);
+      box-shadow: 0 0 0 6px rgba(252, 82, 0, 0.03);
+      animation: dividerPulse 2.8s ease-in-out infinite;
+    }
+
+    .section-divider-dots span:nth-child(2) {
+      animation-delay: 0.25s;
+    }
+
+    .section-divider-dots span:nth-child(3) {
+      animation-delay: 0.5s;
     }
 
     .result-card {
@@ -414,6 +458,12 @@
       background: linear-gradient(180deg, #ffffff, #fff8f4);
     }
 
+    .projection-card.is-record-fast {
+      border-color: var(--danger-border);
+      background: linear-gradient(180deg, #ffffff, var(--danger-soft));
+      box-shadow: 0 14px 26px rgba(179, 75, 75, 0.09);
+    }
+
     .vdot-panel {
       margin-top: 16px;
     }
@@ -512,6 +562,12 @@
       font-size: 0.9em;
     }
 
+    .record-notice {
+      font-size: 0.78rem;
+      color: var(--danger-text);
+      letter-spacing: 0.01em;
+    }
+
     .projection-empty {
       grid-column: 1 / -1;
       padding: 18px;
@@ -519,6 +575,167 @@
       border-radius: 18px;
       color: var(--muted);
       background: rgba(255, 249, 245, 0.82);
+    }
+
+    .section-body {
+      padding: 0 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .mini-input {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(252, 82, 0, 0.14);
+      background: rgba(255, 247, 240, 0.86);
+      color: #7a4a2d;
+      font-size: 0.88rem;
+    }
+
+    .mini-input input {
+      width: 84px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      text-align: right;
+    }
+
+    .slider-control {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: min(100%, 340px);
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(252, 82, 0, 0.14);
+      background: rgba(255, 247, 240, 0.86);
+    }
+
+    .slider-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.88rem;
+      color: #7a4a2d;
+    }
+
+    .slider-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .slider-range {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .slider-scale {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.76rem;
+      color: var(--muted-light);
+    }
+
+    .toggle-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+      border: 1px solid rgba(252, 82, 0, 0.14);
+      background: rgba(255, 247, 240, 0.82);
+      color: #7a4a2d;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .toggle-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 236, 224, 0.96);
+    }
+
+    .toggle-btn.is-active {
+      background: linear-gradient(180deg, rgba(252, 82, 0, 0.95), rgba(194, 65, 12, 0.96));
+      color: #fff7f2;
+      border-color: rgba(194, 65, 12, 0.72);
+      box-shadow: 0 12px 28px rgba(194, 65, 12, 0.18);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid rgba(236, 220, 207, 0.95);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 16px 34px rgba(143, 63, 18, 0.05);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 420px;
+    }
+
+    .data-table th,
+    .data-table td {
+      border-bottom: 1px solid rgba(236, 220, 207, 0.9);
+      padding: 0;
+      text-align: left;
+    }
+
+    .data-table tr:last-child th,
+    .data-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .data-table th {
+      padding: 14px 16px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9a755f;
+      background: rgba(255, 248, 243, 0.9);
+      font-weight: 600;
+    }
+
+    .table-copy {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      padding: 14px 16px;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .table-copy:hover {
+      background: rgba(252, 82, 0, 0.08);
+      color: var(--accent-strong);
+    }
+
+    .table-static {
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 0.92rem;
     }
 
     .footer {
@@ -531,6 +748,31 @@
       color: var(--muted-light);
     }
 
+    .footer-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-strong);
+      text-decoration: none;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+    }
+
+    .footer-icon {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+    }
+
     @keyframes fadeUp {
       from {
         opacity: 0;
@@ -539,6 +781,17 @@
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @keyframes dividerPulse {
+      0%, 100% {
+        transform: scale(0.9);
+        background: rgba(252, 82, 0, 0.32);
+      }
+      50% {
+        transform: scale(1.15);
+        background: rgba(194, 65, 12, 0.72);
       }
     }
 
@@ -626,6 +879,14 @@
       </button>
     </div>
 
+    <div class="section-divider" aria-hidden="true">
+      <div class="section-divider-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
     <details class="projection-panel" id="projectionPanel">
       <summary class="projection-summary">
         <div class="projection-copy">
@@ -652,9 +913,70 @@
       </div>
     </details>
 
+    <details class="projection-panel vdot-panel" id="gapPanel">
+      <summary class="projection-summary">
+        <div class="projection-copy">
+          <div class="projection-eyebrow">Grade Adjusted Pace</div>
+          <div class="projection-subtitle" id="gapSubtitle">Adjust the grade to see the equivalent flat pace across units.</div>
+        </div>
+        <span class="panel-chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="section-body">
+        <div class="table-toolbar">
+          <label class="mini-input">Grade %
+            <input id="gapGradeInput" type="number" step="0.5" min="-15" max="15" value="0" />
+          </label>
+          <div class="toggle-row" id="gapPresetRow"></div>
+        </div>
+        <div class="table-wrap" id="gapTableWrap">
+          <div class="projection-empty">Enter a valid pace or speed to unlock grade-adjusted pacing.</div>
+        </div>
+      </div>
+    </details>
+
+    <details class="projection-panel vdot-panel" id="splitsPanel">
+      <summary class="projection-summary">
+        <div class="projection-copy">
+          <div class="projection-eyebrow">Visual Splits</div>
+          <div class="projection-subtitle" id="splitsSubtitle">Choose a distance to view consistent split breakdowns.</div>
+        </div>
+        <span class="panel-chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="section-body">
+        <div class="table-toolbar">
+          <div class="toggle-row" id="splitToggleRow"></div>
+          <label class="slider-control">
+            <div class="slider-header">
+              <span>Split Bias</span>
+              <span id="splitBiasValue">Even</span>
+            </div>
+            <input id="splitBiasInput" class="slider-range" type="range" min="-20" max="20" step="1" value="0" />
+            <div class="slider-scale">
+              <span>Negative</span>
+              <span class="slider-label">Even</span>
+              <span>Positive</span>
+            </div>
+          </label>
+        </div>
+        <div class="table-wrap" id="splitsTableWrap">
+          <div class="projection-empty">Enter a valid pace or speed to unlock split tables.</div>
+        </div>
+      </div>
+    </details>
+
     <div class="footer">
       <div>Click any result to copy it.</div>
-      <div id="copiedState">Made by Horatiu Lazu</div>
+      <div class="footer-right">
+        <span id="copiedState">Made by</span>
+        <a class="footer-link" href="https://github.com/MathBunny" target="_blank" rel="noreferrer">
+          <span>Horatiu Lazu</span>
+          <span class="footer-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true">
+              <path d="M12 1.5C6.2 1.5 1.5 6.3 1.5 12.2c0 4.7 3 8.7 7.2 10.1.5.1.7-.2.7-.5v-2c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.1-1.6-1.1-1.6-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.5 2.4 1.1 3 .8.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.2 0-1.2.4-2.2 1-3-.1-.3-.4-1.4.1-2.8 0 0 .9-.3 3 .9a10.1 10.1 0 0 1 5.4 0c2.1-1.2 3-.9 3-.9.5 1.4.2 2.5.1 2.8.7.8 1 1.8 1 3 0 4-2.4 4.9-4.7 5.2.4.3.7 1 .7 2v3c0 .3.2.6.7.5a10.7 10.7 0 0 0 7.2-10.1C22.5 6.3 17.8 1.5 12 1.5Z" />
+            </svg>
+          </span>
+        </a>
+      </div>
     </div>
   </div>
 
@@ -675,6 +997,15 @@
       { label: "Marathon", distanceKm: 42.195 },
     ];
 
+    const WORLD_RECORDS = {
+      "5K": 12 * 60 + 49,
+      "10K": 26 * 60 + 24,
+      "Half Marathon": 56 * 60 + 42,
+      "Marathon": 2 * 3600 + 35,
+    };
+
+    const GAP_PRESETS = [-10, -6, -3, 0, 3, 6, 10];
+
     const input = document.getElementById("paceInput");
     const helperText = document.getElementById("helperText");
     const copiedState = document.getElementById("copiedState");
@@ -684,8 +1015,18 @@
     const projectionSubtitle = document.getElementById("projectionSubtitle");
     const vdotContent = document.getElementById("vdotContent");
     const vdotSubtitle = document.getElementById("vdotSubtitle");
+    const gapSubtitle = document.getElementById("gapSubtitle");
+    const gapGradeInput = document.getElementById("gapGradeInput");
+    const gapPresetRow = document.getElementById("gapPresetRow");
+    const gapTableWrap = document.getElementById("gapTableWrap");
+    const splitsSubtitle = document.getElementById("splitsSubtitle");
+    const splitToggleRow = document.getElementById("splitToggleRow");
+    const splitBiasInput = document.getElementById("splitBiasInput");
+    const splitBiasValue = document.getElementById("splitBiasValue");
+    const splitsTableWrap = document.getElementById("splitsTableWrap");
 
     let selectedVdotRace = "5K";
+    let selectedSplitRace = "5K";
 
     const outputEls = {
       minPerKm: document.getElementById("value-minPerKm"),
@@ -697,6 +1038,18 @@
     function round(value, digits = 2) {
       const factor = 10 ** digits;
       return Math.round(value * factor) / factor;
+    }
+
+    function resetCopiedStateSoon() {
+      window.clearTimeout(resetCopiedStateSoon._timer);
+      resetCopiedStateSoon._timer = window.setTimeout(() => {
+        copiedState.textContent = "Made by";
+      }, 1200);
+    }
+
+    function setCopiedState(text) {
+      copiedState.textContent = text;
+      resetCopiedStateSoon();
     }
 
     function decimalMinutesToPace(decimalMinutes) {
@@ -717,6 +1070,33 @@
         return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
       }
       return `${minutes}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    function getPreferredSystem(parsed) {
+      if (!parsed) return "metric";
+      return parsed.type === "mph" || parsed.type === "minPerMile" ? "imperial" : "metric";
+    }
+
+    function formatPaceForSystem(totalSeconds, distanceKm, system) {
+      const paceMinutes = system === "imperial"
+        ? totalSeconds / 60 / (distanceKm / 1.609344)
+        : totalSeconds / 60 / distanceKm;
+      return `${decimalMinutesToPace(paceMinutes)} ${system === "imperial" ? "/mi" : "/km"}`;
+    }
+
+    function formatSpeedRows(minPerKm) {
+      const kmh = 60 / minPerKm;
+      const mph = kmh / 1.609344;
+      return [
+        { unit: "Minutes / kilometer", value: `${decimalMinutesToPace(minPerKm)} /km` },
+        { unit: "Minutes / mile", value: `${decimalMinutesToPace(60 / mph)} /mi` },
+        { unit: "Kilometers / hour", value: `${round(kmh, 2)} km/h` },
+        { unit: "Miles / hour", value: `${round(mph, 2)} mph` },
+      ];
+    }
+
+    function getRaceByLabel(label) {
+      return RACES.find((race) => race.label === label);
     }
 
     function calculateVdot(distanceMeters, timeMinutes) {
@@ -744,6 +1124,71 @@
       }
 
       return (low + high) / 2;
+    }
+
+    function calculateGradeAdjustedMinPerKm(minPerKm, gradePercent) {
+      const grade = Math.max(-0.30, Math.min(0.30, gradePercent / 100));
+      const flatCost = 3.6;
+      const gradeCost =
+        155.4 * grade ** 5 -
+        30.4 * grade ** 4 -
+        43.3 * grade ** 3 +
+        46.3 * grade ** 2 +
+        19.5 * grade +
+        3.6;
+
+      if (!isFinite(gradeCost) || gradeCost <= 0) return null;
+      return minPerKm * (flatCost / gradeCost);
+    }
+
+    function getSplitBiasLabel(bias) {
+      if (bias === 0) return "Even";
+      return `${bias > 0 ? "+" : ""}${bias}%`;
+    }
+
+    function buildSplitRows(distanceKm, system, minPerKm, bias) {
+      const unitDistanceKm = system === "imperial" ? 1.609344 : 1;
+      const unitLabel = system === "imperial" ? "mi" : "km";
+      const segments = [];
+      let coveredKm = 0;
+
+      while (coveredKm < distanceKm - 1e-9) {
+        const segmentKm = Math.min(unitDistanceKm, distanceKm - coveredKm);
+        coveredKm += segmentKm;
+        segments.push({ segmentKm, coveredKm });
+      }
+
+      const biasFactor = bias / 100;
+      const weightedSegments = segments.map((segment, index) => {
+        const normalized = segments.length === 1 ? 0 : (index / (segments.length - 1)) * 2 - 1;
+        const baseSeconds = minPerKm * segment.segmentKm * 60;
+        const rawSeconds = baseSeconds * Math.max(0.35, 1 + biasFactor * normalized);
+        return { ...segment, baseSeconds, rawSeconds };
+      });
+
+      const baseTotal = weightedSegments.reduce((sum, segment) => sum + segment.baseSeconds, 0);
+      const rawTotal = weightedSegments.reduce((sum, segment) => sum + segment.rawSeconds, 0);
+      const normalization = rawTotal > 0 ? baseTotal / rawTotal : 1;
+
+      const rows = [];
+      let index = 1;
+      let cumulativeSeconds = 0;
+
+      weightedSegments.forEach((segment) => {
+        const splitSeconds = segment.rawSeconds * normalization;
+        cumulativeSeconds += splitSeconds;
+        const displayedDistance = system === "imperial" ? segment.coveredKm / 1.609344 : segment.coveredKm;
+        rows.push({
+          distanceLabel: `${round(displayedDistance, displayedDistance % 1 === 0 ? 0 : 1)} ${unitLabel}`,
+          split: secondsToClock(splitSeconds),
+          cumulative: secondsToClock(cumulativeSeconds),
+          copySplit: `${index} ${unitLabel} split: ${secondsToClock(splitSeconds)}`,
+          copyCumulative: `${round(displayedDistance, displayedDistance % 1 === 0 ? 0 : 1)} ${unitLabel}: ${secondsToClock(cumulativeSeconds)}`,
+        });
+        index += 1;
+      });
+
+      return rows;
     }
 
     function parsePaceLike(value) {
@@ -845,14 +1290,16 @@
       projectionSubtitle.textContent = `Based on an even pace of ${decimalMinutesToPace(results.minPerKm)} /km.`;
       projectionContent.innerHTML = RACES.map((race) => {
         const totalSeconds = results.minPerKm * race.distanceKm * 60;
+        const fasterThanRecord = totalSeconds < WORLD_RECORDS[race.label];
         return `
-          <button class="projection-card" type="button" data-projection-copy="${race.label}">
+          <button class="projection-card${fasterThanRecord ? " is-record-fast" : ""}" type="button" data-projection-copy="${race.label}">
             <div>
               <div class="projection-distance">${race.label}</div>
               <div class="projection-meta">
                 <div class="projection-time">${secondsToClock(totalSeconds)}</div>
                 <div class="projection-copy-hint"><span class="copy-icon">⧉</span><span>copy</span></div>
               </div>
+              ${fasterThanRecord ? `<div class="record-notice">Faster than the current world record of ${secondsToClock(WORLD_RECORDS[race.label])}.</div>` : ""}
             </div>
           </button>
         `;
@@ -872,6 +1319,8 @@
         return;
       }
 
+      const parsed = parsePaceLike(input.value);
+      const preferredSystem = getPreferredSystem(parsed);
       const selectedRace = RACES.find((race) => race.label === selectedVdotRace) || RACES[0];
       const selectedTimeMinutes = results.minPerKm * selectedRace.distanceKm;
       const vdot = calculateVdot(selectedRace.distanceKm * 1000, selectedTimeMinutes);
@@ -893,7 +1342,7 @@
                 <div class="projection-copy-hint"><span class="copy-icon">⧉</span><span>pick</span></div>
               </div>
             </div>
-            <div class="vdot-tag">${isSelected ? `Selected basis · VDOT ${round(vdot, 1)}` : `Equivalent at VDOT ${round(vdot, 1)}`}</div>
+            <div class="vdot-tag">${isSelected ? `Selected basis · VDOT ${round(vdot, 1)}` : `Equivalent at VDOT ${round(vdot, 1)}`} (${formatPaceForSystem(equivalentSeconds, race.distanceKm, preferredSystem)})</div>
           </button>
         `;
       }).join("");
@@ -906,19 +1355,148 @@
       });
     }
 
+    function renderGapPresets() {
+      gapPresetRow.innerHTML = GAP_PRESETS.map((value) => `
+        <button class="toggle-btn${Number(gapGradeInput.value) === value ? " is-active" : ""}" type="button" data-gap-preset="${value}">
+          ${value > 0 ? "+" : ""}${value}%
+        </button>
+      `).join("");
+
+      gapPresetRow.querySelectorAll("[data-gap-preset]").forEach((button) => {
+        button.addEventListener("click", () => {
+          gapGradeInput.value = button.dataset.gapPreset;
+          render();
+        });
+      });
+    }
+
+    function renderGapTable(results) {
+      if (!results) {
+        renderGapPresets();
+        gapSubtitle.textContent = "Adjust the grade to see the equivalent flat pace across units.";
+        gapTableWrap.innerHTML = '<div class="projection-empty">Enter a valid pace or speed to unlock grade-adjusted pacing.</div>';
+        return;
+      }
+
+      const gradePercent = Math.max(-15, Math.min(15, Number(gapGradeInput.value) || 0));
+      gapGradeInput.value = String(gradePercent);
+      renderGapPresets();
+      const adjustedMinPerKm = calculateGradeAdjustedMinPerKm(results.minPerKm, gradePercent);
+
+      if (!adjustedMinPerKm) {
+        gapTableWrap.innerHTML = '<div class="projection-empty">This grade is outside the supported range for the current model.</div>';
+        return;
+      }
+
+      gapSubtitle.textContent = `Equivalent flat pacing for a ${gradePercent > 0 ? "+" : ""}${gradePercent}% grade.`;
+      const rows = formatSpeedRows(adjustedMinPerKm);
+      gapTableWrap.innerHTML = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Adjusted Pace</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((row) => `
+              <tr>
+                <td><div class="table-static">${row.unit}</div></td>
+                <td><button class="table-copy" type="button" data-copy-value="${row.value}">${row.value}</button></td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+
+      gapTableWrap.querySelectorAll("[data-copy-value]").forEach((button) => {
+        button.addEventListener("click", () => {
+          copyText(button.dataset.copyValue);
+        });
+      });
+    }
+
+    function renderSplitToggles() {
+      splitToggleRow.innerHTML = RACES.map((race) => `
+        <button class="toggle-btn${race.label === selectedSplitRace ? " is-active" : ""}" type="button" data-split-race="${race.label}">
+          ${race.label}
+        </button>
+      `).join("");
+
+      splitToggleRow.querySelectorAll("[data-split-race]").forEach((button) => {
+        button.addEventListener("click", () => {
+          selectedSplitRace = button.dataset.splitRace;
+          render();
+        });
+      });
+    }
+
+    function renderSplitsTable(results) {
+      renderSplitToggles();
+      const splitBias = Number(splitBiasInput.value) || 0;
+      splitBiasValue.textContent = getSplitBiasLabel(splitBias);
+
+      if (!results) {
+        splitsSubtitle.textContent = "Choose a distance to view consistent split breakdowns.";
+        splitsTableWrap.innerHTML = '<div class="projection-empty">Enter a valid pace or speed to unlock split tables.</div>';
+        return;
+      }
+
+      const parsed = parsePaceLike(input.value);
+      const preferredSystem = getPreferredSystem(parsed);
+      const selectedRace = getRaceByLabel(selectedSplitRace) || RACES[0];
+      const rows = buildSplitRows(selectedRace.distanceKm, preferredSystem, results.minPerKm, splitBias);
+      const unitLabel = preferredSystem === "imperial" ? "mi" : "km";
+
+      const biasDescription = splitBias === 0
+        ? "even"
+        : splitBias > 0
+          ? "positive"
+          : "negative";
+      splitsSubtitle.textContent = `${selectedRace.label} splits in ${unitLabel} with a ${biasDescription} bias.`;
+      splitsTableWrap.innerHTML = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Distance</th>
+              <th>Split</th>
+              <th>Cumulative</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((row) => `
+              <tr>
+                <td><div class="table-static">${row.distanceLabel}</div></td>
+                <td><button class="table-copy" type="button" data-copy-value="${row.copySplit}">${row.split}</button></td>
+                <td><button class="table-copy" type="button" data-copy-value="${row.copyCumulative}">${row.cumulative}</button></td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+
+      splitsTableWrap.querySelectorAll("[data-copy-value]").forEach((button) => {
+        button.addEventListener("click", () => {
+          copyText(button.dataset.copyValue);
+        });
+      });
+    }
+
     async function copyProjection(raceLabel, minPerKm) {
       const race = RACES.find((item) => item.label === raceLabel);
       if (!race) return;
 
       const text = `${race.label}: ${secondsToClock(minPerKm * race.distanceKm * 60)}`;
 
+      copyText(text);
+    }
+
+    async function copyText(text) {
+      if (!text) return;
+
       try {
         await navigator.clipboard.writeText(text);
-        copiedState.textContent = `Copied ${text}`;
-        window.clearTimeout(copyByType._timer);
-        copyByType._timer = window.setTimeout(() => {
-          copiedState.textContent = "Made by Horatiu Lazu";
-        }, 1200);
+        setCopiedState(`Copied ${text}`);
       } catch {
         copiedState.textContent = "Copy failed";
       }
@@ -931,6 +1509,8 @@
       setHelperText(input.value, parsed);
       renderProjections(results);
       renderVdotPanel(results);
+      renderGapTable(results);
+      renderSplitsTable(results);
 
       outputEls.minPerKm.textContent = results ? decimalMinutesToPace(results.minPerKm) : "—";
       outputEls.minPerMile.textContent = results ? decimalMinutesToPace(results.minPerMile) : "—";
@@ -948,17 +1528,7 @@
       if (type === "minPerMile") text = `${decimalMinutesToPace(results.minPerMile)} /mi`;
       if (type === "kmh") text = `${round(results.kmh, 2)} km/h`;
       if (type === "mph") text = `${round(results.mph, 2)} mph`;
-
-      try {
-        await navigator.clipboard.writeText(text);
-        copiedState.textContent = `Copied ${text}`;
-        window.clearTimeout(copyByType._timer);
-        copyByType._timer = window.setTimeout(() => {
-          copiedState.textContent = "Made by Horatiu Lazu";
-        }, 1200);
-      } catch {
-        copiedState.textContent = "Copy failed";
-      }
+      copyText(text);
     }
 
     function hydrateInputFromQuery() {
@@ -997,6 +1567,8 @@
     });
 
     input.addEventListener("input", render);
+    gapGradeInput.addEventListener("input", render);
+    splitBiasInput.addEventListener("input", render);
 
     document.querySelectorAll(".result-card").forEach((card) => {
       card.addEventListener("click", () => {
