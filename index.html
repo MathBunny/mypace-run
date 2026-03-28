@@ -33,16 +33,17 @@
   </script>
   <style>
     :root {
-      --bg: #fafafa;
-      --card: rgba(255, 255, 255, 0.92);
+      --bg: #fbf7f2;
+      --card: rgba(255, 255, 255, 0.94);
       --card-solid: #ffffff;
-      --border: #e4e4e7;
-      --text: #09090b;
-      --muted: #71717a;
-      --muted-light: #a1a1aa;
-      --accent: #111827;
-      --accent-soft: #f4f4f5;
-      --shadow: 0 18px 60px rgba(17, 24, 39, 0.08);
+      --border: #ecdccf;
+      --text: #16120f;
+      --muted: #7a685d;
+      --muted-light: #b59d8b;
+      --accent: #fc5200;
+      --accent-strong: #c2410c;
+      --accent-soft: #fff1e7;
+      --shadow: 0 18px 60px rgba(143, 63, 18, 0.09);
     }
 
     * {
@@ -53,8 +54,9 @@
       margin: 0;
       padding: 0;
       background:
-        radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 40%),
-        linear-gradient(180deg, #fcfcfd 0%, #f5f5f7 100%);
+        radial-gradient(circle at top left, rgba(252, 82, 0, 0.08), transparent 34%),
+        radial-gradient(circle at top right, rgba(255, 212, 191, 0.28), transparent 28%),
+        linear-gradient(180deg, #fffdfa 0%, #f8f1ea 100%);
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -86,14 +88,14 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 16px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.86);
-      color: var(--muted);
+      border: 1px solid rgba(252, 82, 0, 0.16);
+      background: rgba(255, 247, 240, 0.92);
+      color: var(--accent-strong);
       border-radius: 999px;
       padding: 6px 12px;
       font-size: 12px;
       letter-spacing: 0.04em;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 10px 24px rgba(252, 82, 0, 0.08);
       backdrop-filter: blur(12px);
     }
 
@@ -113,6 +115,7 @@
       line-height: 1;
       letter-spacing: -0.04em;
       font-weight: 600;
+      color: #201713;
     }
 
     .hero p {
@@ -120,7 +123,7 @@
       max-width: 36rem;
       font-size: clamp(1rem, 2.5vw, 1.125rem);
       line-height: 1.75;
-      color: #52525b;
+      color: #6f6158;
     }
 
     .input-wrap {
@@ -133,8 +136,8 @@
     .panel {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.94));
-      border: 1px solid rgba(228, 228, 231, 0.92);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 243, 0.96));
+      border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 28px;
       padding: 16px;
       box-shadow: var(--shadow);
@@ -147,7 +150,7 @@
       width: 180px;
       height: 180px;
       border-radius: 999px;
-      background: radial-gradient(circle, rgba(17, 24, 39, 0.06), rgba(17, 24, 39, 0));
+      background: radial-gradient(circle, rgba(252, 82, 0, 0.12), rgba(252, 82, 0, 0));
       pointer-events: none;
     }
 
@@ -171,8 +174,8 @@
     }
 
     .input-row:focus-within {
-      border-color: #a1a1aa;
-      box-shadow: 0 0 0 4px rgba(161, 161, 170, 0.12);
+      border-color: rgba(252, 82, 0, 0.45);
+      box-shadow: 0 0 0 4px rgba(252, 82, 0, 0.11);
       background: #ffffff;
     }
 
@@ -232,7 +235,7 @@
     }
 
     .ghost-btn:hover {
-      background: #f4f4f5;
+      background: var(--accent-soft);
     }
 
     .chips {
@@ -242,9 +245,9 @@
     }
 
     .chip {
-      border: 1px solid var(--border);
-      background: rgba(250, 250, 250, 0.88);
-      color: #52525b;
+      border: 1px solid rgba(252, 82, 0, 0.14);
+      background: rgba(255, 247, 240, 0.86);
+      color: #7a4a2d;
       border-radius: 999px;
       padding: 6px 12px;
       font-size: 0.875rem;
@@ -253,7 +256,7 @@
     }
 
     .chip:hover {
-      background: #f4f4f5;
+      background: rgba(255, 236, 224, 0.96);
       transform: translateY(-1px);
     }
 
@@ -276,7 +279,7 @@
       background: var(--card);
       backdrop-filter: blur(10px);
       border-radius: 1rem;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      box-shadow: 0 3px 10px rgba(143, 63, 18, 0.05);
       padding: 20px;
       cursor: pointer;
       transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
@@ -284,8 +287,8 @@
 
     .result-card:hover {
       transform: translateY(-2px);
-      background: white;
-      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.07);
+      background: linear-gradient(180deg, #ffffff, #fff8f4);
+      box-shadow: 0 18px 34px rgba(252, 82, 0, 0.08);
     }
 
     .result-card:active {
@@ -297,7 +300,7 @@
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.18em;
-      color: var(--muted);
+      color: #9a755f;
     }
 
     .result-row {
@@ -311,7 +314,7 @@
       font-size: clamp(1.5rem, 4vw, 1.875rem);
       font-weight: 600;
       letter-spacing: -0.03em;
-      color: #09090b;
+      color: #1f1712;
       word-break: break-word;
     }
 
@@ -326,10 +329,10 @@
 
     .projection-panel {
       margin-top: 4px;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(244, 244, 245, 0.72));
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(255, 244, 237, 0.78));
+      box-shadow: 0 18px 40px rgba(143, 63, 18, 0.07);
       overflow: hidden;
       opacity: 0;
       transform: translateY(14px);
@@ -372,14 +375,14 @@
       width: 36px;
       height: 36px;
       border-radius: 999px;
-      border: 1px solid rgba(228, 228, 231, 0.9);
-      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(252, 82, 0, 0.14);
+      background: rgba(255, 248, 243, 0.92);
       transition: transform 0.2s ease, background 0.15s ease;
     }
 
     .projection-panel[open] .panel-chevron {
       transform: rotate(180deg);
-      background: #ffffff;
+      background: #fff4ec;
     }
 
     .projection-content {
@@ -391,10 +394,10 @@
 
     .projection-card {
       width: 100%;
-      border: 1px solid rgba(228, 228, 231, 0.92);
+      border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 18px;
       padding: 16px;
-      background: rgba(255, 255, 255, 0.86);
+      background: rgba(255, 255, 255, 0.9);
       min-height: 100px;
       display: flex;
       flex-direction: column;
@@ -407,8 +410,8 @@
 
     .projection-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.07);
-      background: #ffffff;
+      box-shadow: 0 18px 34px rgba(252, 82, 0, 0.08);
+      background: linear-gradient(180deg, #ffffff, #fff8f4);
     }
 
     .vdot-panel {
@@ -417,10 +420,10 @@
 
     .vdot-card {
       width: 100%;
-      border: 1px solid rgba(228, 228, 231, 0.92);
+      border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 18px;
       padding: 16px;
-      background: rgba(255, 255, 255, 0.86);
+      background: rgba(255, 255, 255, 0.9);
       min-height: 110px;
       display: flex;
       flex-direction: column;
@@ -433,14 +436,14 @@
 
     .vdot-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.07);
-      background: #ffffff;
+      box-shadow: 0 18px 34px rgba(252, 82, 0, 0.08);
+      background: linear-gradient(180deg, #ffffff, #fff8f4);
     }
 
     .vdot-card.is-selected {
-      border-color: rgba(17, 24, 39, 0.7);
-      background: linear-gradient(180deg, rgba(17, 24, 39, 0.96), rgba(31, 41, 55, 0.96));
-      box-shadow: 0 20px 40px rgba(17, 24, 39, 0.18);
+      border-color: rgba(194, 65, 12, 0.72);
+      background: linear-gradient(180deg, rgba(252, 82, 0, 0.95), rgba(194, 65, 12, 0.96));
+      box-shadow: 0 22px 42px rgba(194, 65, 12, 0.22);
     }
 
     .vdot-card.is-selected .projection-distance,
@@ -470,14 +473,14 @@
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: var(--muted-light);
+      color: #bc8f73;
     }
 
     .projection-time {
       font-size: clamp(1.25rem, 3vw, 1.6rem);
       font-weight: 600;
       letter-spacing: -0.03em;
-      color: var(--accent);
+      color: #8f3f12;
     }
 
     .projection-meta {
@@ -502,7 +505,7 @@
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #9a7b4f;
+      color: #d96b2d;
     }
 
     .vdot-estimated sup {
@@ -512,10 +515,10 @@
     .projection-empty {
       grid-column: 1 / -1;
       padding: 18px;
-      border: 1px dashed rgba(161, 161, 170, 0.5);
+      border: 1px dashed rgba(252, 82, 0, 0.24);
       border-radius: 18px;
       color: var(--muted);
-      background: rgba(255, 255, 255, 0.55);
+      background: rgba(255, 249, 245, 0.82);
     }
 
     .footer {
