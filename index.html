@@ -214,6 +214,19 @@
       backdrop-filter: blur(12px);
     }
 
+    .badge-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .badge-link:hover {
+      color: var(--accent);
+    }
+
+    .badge-separator {
+      color: rgba(194, 65, 12, 0.38);
+    }
+
     .badge-icon {
       width: 14px;
       height: 14px;
@@ -1239,7 +1252,9 @@
 
       <div class="badge">
         <span class="badge-icon">◔</span>
-        <span>Running pace converter</span>
+        <a class="badge-link" href="index.html">Running pace converter</a>
+        <span class="badge-separator">·</span>
+        <a class="badge-link" href="about.html">About</a>
       </div>
 
       <h1>One input. Every pace.</h1>
