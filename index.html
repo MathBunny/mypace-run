@@ -390,6 +390,7 @@
     }
 
     .projection-card {
+      width: 100%;
       border: 1px solid rgba(228, 228, 231, 0.92);
       border-radius: 18px;
       padding: 16px;
@@ -399,6 +400,15 @@
       flex-direction: column;
       justify-content: space-between;
       gap: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .projection-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.07);
+      background: #ffffff;
     }
 
     .vdot-panel {
@@ -451,6 +461,11 @@
       color: rgba(248, 250, 252, 0.78);
     }
 
+    .vdot-card.is-selected .vdot-estimated,
+    .vdot-card.is-selected .projection-copy-hint {
+      color: rgba(248, 250, 252, 0.78);
+    }
+
     .projection-distance {
       font-size: 0.8rem;
       text-transform: uppercase;
@@ -463,6 +478,35 @@
       font-weight: 600;
       letter-spacing: -0.03em;
       color: var(--accent);
+    }
+
+    .projection-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .projection-copy-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--muted-light);
+      white-space: nowrap;
+    }
+
+    .vdot-estimated {
+      margin-bottom: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9a7b4f;
+    }
+
+    .vdot-estimated sup {
+      font-size: 0.9em;
     }
 
     .projection-empty {
@@ -799,14 +843,23 @@
       projectionContent.innerHTML = RACES.map((race) => {
         const totalSeconds = results.minPerKm * race.distanceKm * 60;
         return `
-          <article class="projection-card">
+          <button class="projection-card" type="button" data-projection-copy="${race.label}">
             <div>
               <div class="projection-distance">${race.label}</div>
-              <div class="projection-time">${secondsToClock(totalSeconds)}</div>
+              <div class="projection-meta">
+                <div class="projection-time">${secondsToClock(totalSeconds)}</div>
+                <div class="projection-copy-hint"><span class="copy-icon">⧉</span><span>copy</span></div>
+              </div>
             </div>
-          </article>
+          </button>
         `;
       }).join("");
+
+      projectionContent.querySelectorAll("[data-projection-copy]").forEach((button) => {
+        button.addEventListener("click", () => {
+          copyProjection(button.dataset.projectionCopy, results.minPerKm);
+        });
+      });
     }
 
     function renderVdotPanel(results) {
@@ -820,7 +873,7 @@
       const selectedTimeMinutes = results.minPerKm * selectedRace.distanceKm;
       const vdot = calculateVdot(selectedRace.distanceKm * 1000, selectedTimeMinutes);
 
-      vdotSubtitle.textContent = `VDOT ${round(vdot, 1)} from ${selectedRace.label} pace. Select a different race to compare equivalents.`;
+      vdotSubtitle.textContent = "Select a different race to compare equivalents.";
       vdotContent.innerHTML = RACES.map((race) => {
         const isSelected = race.label === selectedRace.label;
         const equivalentSeconds = isSelected
@@ -831,7 +884,11 @@
           <button class="vdot-card${isSelected ? " is-selected" : ""}" type="button" data-vdot-race="${race.label}">
             <div>
               <div class="projection-distance">${race.label}</div>
-              <div class="projection-time">${secondsToClock(equivalentSeconds)}</div>
+              <div class="vdot-estimated"><sup>Estimated</sup></div>
+              <div class="projection-meta">
+                <div class="projection-time">${secondsToClock(equivalentSeconds)}</div>
+                <div class="projection-copy-hint"><span class="copy-icon">⧉</span><span>pick</span></div>
+              </div>
             </div>
             <div class="vdot-tag">${isSelected ? `Selected basis · VDOT ${round(vdot, 1)}` : `Equivalent at VDOT ${round(vdot, 1)}`}</div>
           </button>
@@ -844,6 +901,24 @@
           render();
         });
       });
+    }
+
+    async function copyProjection(raceLabel, minPerKm) {
+      const race = RACES.find((item) => item.label === raceLabel);
+      if (!race) return;
+
+      const text = `${race.label}: ${secondsToClock(minPerKm * race.distanceKm * 60)}`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        copiedState.textContent = `Copied ${text}`;
+        window.clearTimeout(copyByType._timer);
+        copyByType._timer = window.setTimeout(() => {
+          copiedState.textContent = "Made by Horatiu Lazu";
+        }, 1200);
+      } catch {
+        copiedState.textContent = "Copy failed";
+      }
     }
 
     function render() {
