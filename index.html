@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running Pace Converter</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --card: rgba(255, 255, 255, 0.92);
+      --card-solid: #ffffff;
+      --border: #e4e4e7;
+      --text: #09090b;
+      --muted: #71717a;
+      --muted-light: #a1a1aa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      max-width: 64rem;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 24px;
+    }
+
+    .hero {
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.35s ease forwards;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-icon {
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    h1 {
+      max-width: 42rem;
+      margin: 0;
+      font-size: clamp(2.5rem, 7vw, 3.75rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-weight: 600;
+    }
+
+    .hero p {
+      margin: 16px 0 0;
+      max-width: 36rem;
+      font-size: clamp(1rem, 2.5vw, 1.125rem);
+      line-height: 1.75;
+      color: #52525b;
+    }
+
+    .input-wrap {
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 0.35s ease 0.05s forwards;
+    }
+
+    .panel {
+      background: var(--card-solid);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .panel-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 16px;
+      transition: border-color 0.15s ease;
+    }
+
+    .input-row:focus-within {
+      border-color: #a1a1aa;
+    }
+
+    .leading-icon,
+    .copy-icon,
+    .reset-icon {
+      color: var(--muted-light);
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .leading-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 18px;
+    }
+
+    .reset-icon {
+      width: 16px;
+      height: 16px;
+      font-size: 14px;
+    }
+
+    .copy-icon {
+      width: 16px;
+      height: 16px;
+      font-size: 13px;
+    }
+
+    .pace-input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font-size: 1.125rem;
+      color: var(--text);
+    }
+
+    .pace-input::placeholder {
+      color: var(--muted-light);
+    }
+
+    .ghost-btn {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+
+    .ghost-btn:hover {
+      background: #f4f4f5;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: #fafafa;
+      color: #52525b;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .chip:hover {
+      background: #f4f4f5;
+    }
+
+    .helper {
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    .results {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .result-card {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .result-card:hover {
+      transform: translateY(-2px);
+      background: white;
+    }
+
+    .result-card:active {
+      transform: scale(0.99);
+    }
+
+    .result-label {
+      margin-bottom: 8px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    .result-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .result-value {
+      font-size: clamp(1.5rem, 4vw, 1.875rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: #09090b;
+      word-break: break-word;
+    }
+
+    .result-suffix {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: var(--muted-light);
+      white-space: nowrap;
+    }
+
+    .footer {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 0.875rem;
+      color: var(--muted-light);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 28px 16px 40px;
+      }
+
+      .results {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="hero">
+      <div class="badge">
+        <span class="badge-icon">◔</span>
+        <span>Running pace converter</span>
+      </div>
+
+      <h1>One input. Every pace.</h1>
+      <p>Type a speed or pace once. Instantly see km/h, mph, min/km, and min/mile with no dropdowns and no extra clicks.</p>
+    </div>
+
+    <div class="input-wrap">
+      <div class="panel">
+        <div class="panel-inner">
+          <div class="input-row">
+            <span class="leading-icon">↔</span>
+            <input id="paceInput" class="pace-input" value="4:30 /km" placeholder="Try 4:30 /km or 8.2 mph" />
+            <button id="clearBtn" class="ghost-btn" aria-label="Clear input">
+              <span class="reset-icon">⟲</span>
+            </button>
+          </div>
+
+          <div class="chips" id="chips"></div>
+          <div class="helper" id="helperText"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results">
+      <button class="result-card" data-copy-type="minPerKm">
+        <div class="result-label">Minutes / kilometer</div>
+        <div class="result-row">
+          <div class="result-value" id="value-minPerKm">—</div>
+          <div class="result-suffix"><span class="copy-icon">⧉</span><span>min/km</span></div>
+        </div>
+      </button>
+
+      <button class="result-card" data-copy-type="minPerMile">
+        <div class="result-label">Minutes / mile</div>
+        <div class="result-row">
+          <div class="result-value" id="value-minPerMile">—</div>
+          <div class="result-suffix"><span class="copy-icon">⧉</span><span>min/mi</span></div>
+        </div>
+      </button>
+
+      <button class="result-card" data-copy-type="kmh">
+        <div class="result-label">Kilometers / hour</div>
+        <div class="result-row">
+          <div class="result-value" id="value-kmh">—</div>
+          <div class="result-suffix"><span class="copy-icon">⧉</span><span>km/h</span></div>
+        </div>
+      </button>
+
+      <button class="result-card" data-copy-type="mph">
+        <div class="result-label">Miles / hour</div>
+        <div class="result-row">
+          <div class="result-value" id="value-mph">—</div>
+          <div class="result-suffix"><span class="copy-icon">⧉</span><span>mph</span></div>
+        </div>
+      </button>
+    </div>
+
+    <div class="footer">
+      <div>Click any result to copy it.</div>
+      <div id="copiedState">Minimal. Fast. Keyboard-friendly.</div>
+    </div>
+  </div>
+
+  <script>
+    const EXAMPLES = [
+      "4:30 /km",
+      "7:15 /mi",
+      "13.3 km/h",
+      "8.2 mph",
+      "4.5 min/km",
+      "7.5 min/mi",
+    ];
+
+    const input = document.getElementById("paceInput");
+    const helperText = document.getElementById("helperText");
+    const copiedState = document.getElementById("copiedState");
+    const chips = document.getElementById("chips");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const outputEls = {
+      minPerKm: document.getElementById("value-minPerKm"),
+      minPerMile: document.getElementById("value-minPerMile"),
+      kmh: document.getElementById("value-kmh"),
+      mph: document.getElementById("value-mph"),
+    };
+
+    function round(value, digits = 2) {
+      const factor = 10 ** digits;
+      return Math.round(value * factor) / factor;
+    }
+
+    function decimalMinutesToPace(decimalMinutes) {
+      if (!isFinite(decimalMinutes) || decimalMinutes <= 0) return "—";
+      const totalSeconds = Math.round(decimalMinutes * 60);
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      return `${mins}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function parsePaceLike(value) {
+      const trimmed = value.trim().toLowerCase();
+      if (!trimmed) return null;
+
+      const mmss = trimmed.match(/^(\d{1,2})\s*:\s*(\d{1,2})(?:\s*(?:min)?)?\s*(?:\/|per)?\s*(km|mi|mile)?$/);
+      if (mmss) {
+        const minutes = Number(mmss[1]);
+        const seconds = Number(mmss[2]);
+        const unit = mmss[3] || "km";
+        return {
+          type: unit.startsWith("mi") ? "minPerMile" : "minPerKm",
+          value: minutes + seconds / 60,
+        };
+      }
+
+      const numeric = trimmed.match(/^(\d+(?:\.\d+)?)\s*(km\/h|kph|kmh|mph|min\/km|min\/mi|min\/mile|\/km|\/mi|per km|per mile)$/);
+      if (numeric) {
+        const amount = Number(numeric[1]);
+        const unit = numeric[2];
+        if (["km/h", "kph", "kmh"].includes(unit)) return { type: "kmh", value: amount };
+        if (unit === "mph") return { type: "mph", value: amount };
+        if (["min/km", "/km", "per km"].includes(unit)) return { type: "minPerKm", value: amount };
+        if (["min/mi", "min/mile", "/mi", "per mile"].includes(unit)) return { type: "minPerMile", value: amount };
+      }
+
+      const rawNumber = trimmed.match(/^(\d+(?:\.\d+)?)$/);
+      if (rawNumber) {
+        const amount = Number(rawNumber[1]);
+        if (amount >= 2.5 && amount <= 8) return { type: "minPerKm", value: amount };
+        if (amount > 8 && amount <= 20) return { type: "kmh", value: amount };
+        if (amount > 20) return { type: "mph", value: amount };
+      }
+
+      return null;
+    }
+
+    function convert(parsed) {
+      if (!parsed) return null;
+
+      let kmh;
+      switch (parsed.type) {
+        case "kmh":
+          kmh = parsed.value;
+          break;
+        case "mph":
+          kmh = parsed.value * 1.609344;
+          break;
+        case "minPerKm":
+          kmh = 60 / parsed.value;
+          break;
+        case "minPerMile":
+          kmh = 96.56064 / parsed.value;
+          break;
+        default:
+          return null;
+      }
+
+      const mph = kmh / 1.609344;
+      const minPerKm = 60 / kmh;
+      const minPerMile = 60 / mph;
+
+      return { kmh, mph, minPerKm, minPerMile };
+    }
+
+    function setHelperText(inputValue, parsed) {
+      if (!inputValue.trim()) {
+        helperText.textContent = "Type one pace or speed. The app infers the unit instantly.";
+        return;
+      }
+      if (!parsed) {
+        helperText.textContent = "Try formats like 4:30 /km, 7:15 /mi, 13.3 km/h, or 8.2 mph.";
+        return;
+      }
+      switch (parsed.type) {
+        case "kmh":
+          helperText.textContent = "Detected speed in kilometers per hour.";
+          return;
+        case "mph":
+          helperText.textContent = "Detected speed in miles per hour.";
+          return;
+        case "minPerKm":
+          helperText.textContent = "Detected pace in minutes per kilometer.";
+          return;
+        case "minPerMile":
+          helperText.textContent = "Detected pace in minutes per mile.";
+          return;
+      }
+    }
+
+    function render() {
+      const parsed = parsePaceLike(input.value);
+      const results = convert(parsed);
+
+      setHelperText(input.value, parsed);
+
+      outputEls.minPerKm.textContent = results ? decimalMinutesToPace(results.minPerKm) : "—";
+      outputEls.minPerMile.textContent = results ? decimalMinutesToPace(results.minPerMile) : "—";
+      outputEls.kmh.textContent = results ? String(round(results.kmh, 2)) : "—";
+      outputEls.mph.textContent = results ? String(round(results.mph, 2)) : "—";
+    }
+
+    async function copyByType(type) {
+      const parsed = parsePaceLike(input.value);
+      const results = convert(parsed);
+      if (!results) return;
+
+      let text = "";
+      if (type === "minPerKm") text = `${decimalMinutesToPace(results.minPerKm)} /km`;
+      if (type === "minPerMile") text = `${decimalMinutesToPace(results.minPerMile)} /mi`;
+      if (type === "kmh") text = `${round(results.kmh, 2)} km/h`;
+      if (type === "mph") text = `${round(results.mph, 2)} mph`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        copiedState.textContent = `Copied ${text}`;
+        window.clearTimeout(copyByType._timer);
+        copyByType._timer = window.setTimeout(() => {
+          copiedState.textContent = "Minimal. Fast. Keyboard-friendly.";
+        }, 1200);
+      } catch {
+        copiedState.textContent = "Copy failed";
+      }
+    }
+
+    EXAMPLES.forEach((example) => {
+      const button = document.createElement("button");
+      button.className = "chip";
+      button.type = "button";
+      button.textContent = example;
+      button.addEventListener("click", () => {
+        input.value = example;
+        render();
+        input.focus();
+      });
+      chips.appendChild(button);
+    });
+
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      render();
+      input.focus();
+    });
+
+    input.addEventListener("input", render);
+
+    document.querySelectorAll(".result-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        copyByType(card.dataset.copyType);
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>
