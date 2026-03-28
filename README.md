@@ -1,6 +1,8 @@
 # mypace.run
 
-Fast, simple running pace conversion with minimal clicks.
+Fast, simple running pace conversion with minimal clicks. 🏃
+
+Live site: [http://mypace.run](http://mypace.run) ✨
 
 <p align="center">
   <img src="https://i.imgur.com/Az7J3UX.png" alt="mypace.run screenshot" width="1200" />
@@ -27,7 +29,7 @@ The result is a running utility that feels fast enough to use mid-workout, on th
 
 ## Features
 
-### Core Pace Conversion
+### Core Pace Conversion ⚡
 
 - Instant conversion across `min/km`, `min/mi`, `km/h`, and `mph`
 - Smart parsing for common inputs like `5:30/km`, `7:15/mi`, `13.3 km/h`, and `8.2 mph`
@@ -35,7 +37,7 @@ The result is a running utility that feels fast enough to use mid-workout, on th
 - Desktop keyboard flow with `Tab` cycling through units
 - Copyable result cards with smooth visual feedback
 
-### Race Tools
+### Race Tools 📈
 
 - Race projections for `5K`, `10K`, `Half Marathon`, and `Marathon`
 - World-record warning state if a projection is faster than the current record threshold
@@ -43,7 +45,7 @@ The result is a running utility that feels fast enough to use mid-workout, on th
 - Grade Adjusted Pace table across multiple units
 - Visual split tables with positive and negative split weighting
 
-### UX Details
+### UX Details 🎯
 
 - Mobile-first layout
 - Desktop-only advanced section “unzip” interaction to reduce information overload
@@ -52,7 +54,7 @@ The result is a running utility that feels fast enough to use mid-workout, on th
 - Dedicated About page for discoverability and SEO
 - Small hidden divider mini-game as an easter egg
 
-## Built As A Static Site
+## Built As A Static Site 🧩
 
 Everything runs inline in the HTML with JavaScript so the site stays lightweight and easy to deploy.
 There is no backend required.
@@ -63,7 +65,7 @@ There is no backend required.
 - `about.html`: SEO-friendly About page
 - `README.md`: project overview
 
-## Local Development
+## Local Development 💻
 
 Because the project is static, you can run it with any simple local server.
 
@@ -85,7 +87,7 @@ Then open `http://localhost:8000`.
 
 Feedback, bugs, and feature ideas are welcome here:
 
-- Repo: [MathBunny/mypace-run](https://github.com/MathBunny/mypace-run)
+- Repo: [MathBunny/mypace-run](https://github.com/MathBunny/mypace-run) 💡
 
 ## Philosophy
 
