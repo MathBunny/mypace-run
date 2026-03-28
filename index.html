@@ -401,6 +401,56 @@
       gap: 12px;
     }
 
+    .vdot-panel {
+      margin-top: 16px;
+    }
+
+    .vdot-card {
+      width: 100%;
+      border: 1px solid rgba(228, 228, 231, 0.92);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.86);
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .vdot-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.07);
+      background: #ffffff;
+    }
+
+    .vdot-card.is-selected {
+      border-color: rgba(17, 24, 39, 0.7);
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.96), rgba(31, 41, 55, 0.96));
+      box-shadow: 0 20px 40px rgba(17, 24, 39, 0.18);
+    }
+
+    .vdot-card.is-selected .projection-distance,
+    .vdot-card.is-selected .projection-time {
+      color: #f8fafc;
+    }
+
+    .vdot-card.is-selected .projection-distance {
+      color: rgba(248, 250, 252, 0.72);
+    }
+
+    .vdot-tag {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .vdot-card.is-selected .vdot-tag {
+      color: rgba(248, 250, 252, 0.78);
+    }
+
     .projection-distance {
       font-size: 0.8rem;
       text-transform: uppercase;
@@ -542,6 +592,19 @@
       </div>
     </details>
 
+    <details class="projection-panel vdot-panel" id="vdotPanel">
+      <summary class="projection-summary">
+        <div class="projection-copy">
+          <div class="projection-eyebrow">VDOT Equivalents</div>
+          <div class="projection-subtitle" id="vdotSubtitle">Choose a race below to treat the current input as that race pace.</div>
+        </div>
+        <span class="panel-chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="projection-content" id="vdotContent">
+        <div class="projection-empty">Enter a valid pace or speed to unlock VDOT equivalents.</div>
+      </div>
+    </details>
+
     <div class="footer">
       <div>Click any result to copy it.</div>
       <div id="copiedState">Made by Horatiu Lazu</div>
@@ -572,6 +635,10 @@
     const clearBtn = document.getElementById("clearBtn");
     const projectionContent = document.getElementById("projectionContent");
     const projectionSubtitle = document.getElementById("projectionSubtitle");
+    const vdotContent = document.getElementById("vdotContent");
+    const vdotSubtitle = document.getElementById("vdotSubtitle");
+
+    let selectedVdotRace = "5K";
 
     const outputEls = {
       minPerKm: document.getElementById("value-minPerKm"),
@@ -603,6 +670,33 @@
         return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
       }
       return `${minutes}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    function calculateVdot(distanceMeters, timeMinutes) {
+      const velocity = distanceMeters / timeMinutes;
+      const oxygenCost = -4.6 + 0.182258 * velocity + 0.000104 * velocity * velocity;
+      const percentMax =
+        0.8 +
+        0.1894393 * Math.exp(-0.012778 * timeMinutes) +
+        0.2989558 * Math.exp(-0.1932605 * timeMinutes);
+      return oxygenCost / percentMax;
+    }
+
+    function solveRaceTimeMinutes(distanceMeters, targetVdot) {
+      let low = 1;
+      let high = 1000;
+
+      for (let i = 0; i < 80; i += 1) {
+        const mid = (low + high) / 2;
+        const currentVdot = calculateVdot(distanceMeters, mid);
+        if (currentVdot > targetVdot) {
+          low = mid;
+        } else {
+          high = mid;
+        }
+      }
+
+      return (low + high) / 2;
     }
 
     function parsePaceLike(value) {
@@ -715,12 +809,50 @@
       }).join("");
     }
 
+    function renderVdotPanel(results) {
+      if (!results) {
+        vdotSubtitle.textContent = "Choose a race below to treat the current input as that race pace.";
+        vdotContent.innerHTML = '<div class="projection-empty">Enter a valid pace or speed to unlock VDOT equivalents.</div>';
+        return;
+      }
+
+      const selectedRace = RACES.find((race) => race.label === selectedVdotRace) || RACES[0];
+      const selectedTimeMinutes = results.minPerKm * selectedRace.distanceKm;
+      const vdot = calculateVdot(selectedRace.distanceKm * 1000, selectedTimeMinutes);
+
+      vdotSubtitle.textContent = `VDOT ${round(vdot, 1)} from ${selectedRace.label} pace. Select a different race to compare equivalents.`;
+      vdotContent.innerHTML = RACES.map((race) => {
+        const isSelected = race.label === selectedRace.label;
+        const equivalentSeconds = isSelected
+          ? selectedTimeMinutes * 60
+          : solveRaceTimeMinutes(race.distanceKm * 1000, vdot) * 60;
+
+        return `
+          <button class="vdot-card${isSelected ? " is-selected" : ""}" type="button" data-vdot-race="${race.label}">
+            <div>
+              <div class="projection-distance">${race.label}</div>
+              <div class="projection-time">${secondsToClock(equivalentSeconds)}</div>
+            </div>
+            <div class="vdot-tag">${isSelected ? `Selected basis · VDOT ${round(vdot, 1)}` : `Equivalent at VDOT ${round(vdot, 1)}`}</div>
+          </button>
+        `;
+      }).join("");
+
+      vdotContent.querySelectorAll("[data-vdot-race]").forEach((button) => {
+        button.addEventListener("click", () => {
+          selectedVdotRace = button.dataset.vdotRace;
+          render();
+        });
+      });
+    }
+
     function render() {
       const parsed = parsePaceLike(input.value);
       const results = convert(parsed);
 
       setHelperText(input.value, parsed);
       renderProjections(results);
+      renderVdotPanel(results);
 
       outputEls.minPerKm.textContent = results ? decimalMinutesToPace(results.minPerKm) : "—";
       outputEls.minPerMile.textContent = results ? decimalMinutesToPace(results.minPerMile) : "—";
