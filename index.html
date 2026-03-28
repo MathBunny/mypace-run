@@ -388,12 +388,17 @@
     }
 
     .section-divider {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 14px;
       padding: 30px 0 26px;
       color: rgba(188, 143, 115, 0.9);
+      border: 0;
+      width: 100%;
+      background: transparent;
+      cursor: pointer;
     }
 
     .section-divider::before,
@@ -426,6 +431,204 @@
 
     .section-divider-dots span:nth-child(3) {
       animation-delay: 0.5s;
+    }
+
+    .section-divider:hover .section-divider-dots span {
+      background: rgba(194, 65, 12, 0.52);
+    }
+
+    .divider-label {
+      display: none;
+    }
+
+    .section-divider:focus-visible {
+      outline: none;
+    }
+
+    .section-divider.is-game::before,
+    .section-divider.is-game::after,
+    .section-divider.is-game .section-divider-dots,
+    .section-divider.is-game .divider-label {
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .divider-game {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255, 249, 244, 0.96), rgba(255, 241, 231, 0.98));
+      box-shadow: inset 0 0 0 1px rgba(252, 82, 0, 0.12);
+    }
+
+    .section-divider.is-game {
+      min-height: 138px;
+      padding: 46px 0 42px;
+    }
+
+    .section-divider.is-game .divider-game {
+      display: flex;
+    }
+
+    .divider-game-track {
+      position: absolute;
+      inset: 16px 0 14px;
+      overflow: hidden;
+    }
+
+    .divider-game-track::before,
+    .divider-game-track::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(252, 82, 0, 0), rgba(252, 82, 0, 0.24), rgba(252, 82, 0, 0));
+    }
+
+    .divider-game-track::before {
+      top: 18px;
+    }
+
+    .divider-game-track::after {
+      bottom: 16px;
+    }
+
+    .divider-game-ground {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 24px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(252, 82, 0, 0), rgba(252, 82, 0, 0.4), rgba(252, 82, 0, 0));
+    }
+
+    .divider-game-runner {
+      position: absolute;
+      bottom: 26px;
+      left: 56px;
+      width: 28px;
+      height: 28px;
+      color: rgba(194, 65, 12, 0.96);
+      will-change: transform;
+      filter: drop-shadow(0 8px 12px rgba(194, 65, 12, 0.16));
+    }
+
+    .divider-game-runner .runner-head {
+      position: absolute;
+      top: 1px;
+      left: 15px;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .divider-game-runner .runner-body,
+    .divider-game-runner .runner-arm,
+    .divider-game-runner .runner-leg-front,
+    .divider-game-runner .runner-leg-back {
+      position: absolute;
+      border-radius: 999px;
+      background: currentColor;
+      transform-origin: left center;
+    }
+
+    .divider-game-runner .runner-body {
+      top: 8px;
+      left: 10px;
+      width: 11px;
+      height: 3px;
+      transform: rotate(-28deg);
+    }
+
+    .divider-game-runner .runner-arm {
+      top: 11px;
+      left: 7px;
+      width: 10px;
+      height: 2px;
+      transform: rotate(24deg);
+      opacity: 0.9;
+    }
+
+    .divider-game-runner .runner-leg-front {
+      top: 16px;
+      left: 13px;
+      width: 12px;
+      height: 3px;
+      transform: rotate(30deg);
+    }
+
+    .divider-game-runner .runner-leg-back {
+      top: 17px;
+      left: 7px;
+      width: 10px;
+      height: 3px;
+      transform: rotate(-40deg);
+      opacity: 0.84;
+    }
+
+    .divider-game-ball {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.86), rgba(255,255,255,0.22) 28%, rgba(252, 82, 0, 0.82) 29%, rgba(194, 65, 12, 0.95));
+      box-shadow: 0 10px 20px rgba(194, 65, 12, 0.14);
+      will-change: transform;
+    }
+
+    .divider-game-ui {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .divider-game-hint,
+    .divider-game-score,
+    .divider-game-live {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 252, 248, 0.88);
+      border: 1px solid rgba(252, 82, 0, 0.12);
+      color: #7a4a2d;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 12px 22px rgba(252, 82, 0, 0.06);
+      white-space: nowrap;
+    }
+
+    .divider-game-hint {
+      top: 10px;
+      font-size: 0.76rem;
+      letter-spacing: 0.04em;
+    }
+
+    .divider-game-live {
+      top: 10px;
+      right: 18px;
+      left: auto;
+      transform: none;
+      font-size: 0.76rem;
+    }
+
+    .divider-game-score {
+      top: 50%;
+      opacity: 0;
+      transform: translate(-50%, -50%) translateY(8px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      font-size: 0.84rem;
+    }
+
+    .divider-game-score.is-visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(0);
     }
 
     .result-card {
@@ -1037,13 +1240,31 @@
       </button>
     </div>
 
-    <div class="section-divider" aria-hidden="true">
+    <button class="section-divider" id="sectionDivider" type="button" aria-label="Open divider easter egg game">
+      <span class="divider-label">Click For A Tiny Challenge</span>
       <div class="section-divider-dots">
         <span></span>
         <span></span>
         <span></span>
       </div>
-    </div>
+      <div class="divider-game" id="dividerGame" aria-hidden="true">
+        <div class="divider-game-track" id="dividerGameTrack">
+          <div class="divider-game-ground"></div>
+          <div class="divider-game-runner" id="dividerGameRunner">
+            <span class="runner-head"></span>
+            <span class="runner-body"></span>
+            <span class="runner-arm"></span>
+            <span class="runner-leg-front"></span>
+            <span class="runner-leg-back"></span>
+          </div>
+        </div>
+        <div class="divider-game-ui">
+          <div class="divider-game-hint" id="dividerGameHint">Click or press Enter to jump</div>
+          <div class="divider-game-live" id="dividerGameLive">Dodged 0</div>
+          <div class="divider-game-score" id="dividerGameScore"></div>
+        </div>
+      </div>
+    </button>
 
     <details class="projection-panel" id="projectionPanel">
       <summary class="projection-summary">
@@ -1169,6 +1390,13 @@
     const copiedState = document.getElementById("copiedState");
     const chips = document.getElementById("chips");
     const clearBtn = document.getElementById("clearBtn");
+    const sectionDivider = document.getElementById("sectionDivider");
+    const dividerGame = document.getElementById("dividerGame");
+    const dividerGameTrack = document.getElementById("dividerGameTrack");
+    const dividerGameRunner = document.getElementById("dividerGameRunner");
+    const dividerGameHint = document.getElementById("dividerGameHint");
+    const dividerGameLive = document.getElementById("dividerGameLive");
+    const dividerGameScore = document.getElementById("dividerGameScore");
     const projectionContent = document.getElementById("projectionContent");
     const projectionSubtitle = document.getElementById("projectionSubtitle");
     const vdotContent = document.getElementById("vdotContent");
@@ -1185,6 +1413,19 @@
 
     let selectedVdotRace = "5K";
     let selectedSplitRace = "5K";
+    const dividerGameState = {
+      active: false,
+      rafId: 0,
+      resetTimer: 0,
+      lastFrame: 0,
+      startTime: 0,
+      lastSpawn: 0,
+      score: 0,
+      jumpVelocity: 0,
+      jumpOffset: 0,
+      runPhase: 0,
+      obstacles: [],
+    };
 
     const outputEls = {
       minPerKm: document.getElementById("value-minPerKm"),
@@ -1208,6 +1449,10 @@
     function setCopiedState(text) {
       copiedState.textContent = text;
       resetCopiedStateSoon();
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
     }
 
     function decimalMinutesToPace(decimalMinutes) {
@@ -1640,6 +1885,166 @@
       });
     }
 
+    function resetDividerGameUI() {
+      dividerGameTrack.querySelectorAll(".divider-game-ball").forEach((ball) => ball.remove());
+      dividerGameRunner.style.transform = "translate3d(0, 0, 0)";
+      dividerGameHint.style.opacity = "1";
+      dividerGameLive.textContent = "Dodged 0";
+      dividerGameScore.classList.remove("is-visible");
+      dividerGameScore.textContent = "";
+    }
+
+    function finishDividerGame() {
+      window.cancelAnimationFrame(dividerGameState.rafId);
+      dividerGameState.active = false;
+      dividerGameHint.style.opacity = "0";
+      dividerGameScore.textContent = `Game over. Balls dodged: ${dividerGameState.score}`;
+      dividerGameScore.classList.add("is-visible");
+      dividerGameLive.textContent = `Dodged ${dividerGameState.score}`;
+      window.clearTimeout(dividerGameState.resetTimer);
+      dividerGameState.resetTimer = window.setTimeout(() => {
+        sectionDivider.classList.remove("is-game");
+        dividerGame.setAttribute("aria-hidden", "true");
+        resetDividerGameUI();
+      }, 2400);
+    }
+
+    function jumpDividerRunner() {
+      if (!dividerGameState.active) return;
+      if (dividerGameState.jumpOffset > 4) return;
+      dividerGameState.jumpVelocity = 520;
+      dividerGameHint.style.opacity = "0";
+    }
+
+    function spawnDividerBall(now) {
+      const elapsed = (now - dividerGameState.startTime) / 1000;
+      const difficulty = 1 + elapsed / 8;
+      const ballEl = document.createElement("span");
+      ballEl.className = "divider-game-ball";
+      dividerGameTrack.appendChild(ballEl);
+
+      dividerGameState.obstacles.push({
+        el: ballEl,
+        x: dividerGameTrack.clientWidth + 18,
+        size: 13 + Math.min(7, difficulty),
+        speed: 180 + difficulty * 26 + Math.random() * 22,
+        amplitude: 8 + Math.random() * (14 + difficulty * 4),
+        frequency: 2 + Math.random() * 2.2,
+        phase: Math.random() * Math.PI * 2,
+        baseY: 18 + Math.random() * 30,
+        counted: false,
+      });
+    }
+
+    function runDividerGame(now) {
+      if (!dividerGameState.active) return;
+
+      if (!dividerGameState.lastFrame) {
+        dividerGameState.lastFrame = now;
+        dividerGameState.startTime = now;
+        dividerGameState.lastSpawn = now;
+      }
+
+      const dt = Math.min(0.032, (now - dividerGameState.lastFrame) / 1000);
+      dividerGameState.lastFrame = now;
+      const elapsed = (now - dividerGameState.startTime) / 1000;
+
+      dividerGameState.jumpVelocity -= 1120 * dt;
+      dividerGameState.jumpOffset = Math.max(0, dividerGameState.jumpOffset + dividerGameState.jumpVelocity * dt);
+      if (dividerGameState.jumpOffset === 0 && dividerGameState.jumpVelocity < 0) {
+        dividerGameState.jumpVelocity = 0;
+      }
+
+      dividerGameState.runPhase += dt * 4.2;
+      const runnerX = Math.sin(dividerGameState.runPhase) * (10 + Math.min(12, elapsed * 0.7));
+      const runnerY = -dividerGameState.jumpOffset;
+      dividerGameRunner.style.transform = `translate3d(${runnerX}px, ${runnerY}px, 0)`;
+
+      const spawnInterval = Math.max(280, 820 - elapsed * 38 - dividerGameState.score * 7);
+      if (now - dividerGameState.lastSpawn >= spawnInterval) {
+        const extraBallChance = clamp((elapsed - 7) / 18, 0, 0.52);
+        const spawnCount = Math.random() < extraBallChance ? 2 : 1;
+        for (let i = 0; i < spawnCount; i += 1) {
+          spawnDividerBall(now + i * 90);
+        }
+        dividerGameState.lastSpawn = now;
+      }
+
+      const runnerRect = {
+        left: 56 + runnerX + 9,
+        right: 56 + runnerX + 21,
+        top: 50 + runnerY,
+        bottom: 64 + runnerY,
+      };
+
+      dividerGameState.obstacles = dividerGameState.obstacles.filter((obstacle) => {
+        obstacle.x -= obstacle.speed * dt;
+        const y = obstacle.baseY + Math.sin(elapsed * obstacle.frequency + obstacle.phase) * obstacle.amplitude;
+        obstacle.el.style.width = `${obstacle.size}px`;
+        obstacle.el.style.height = `${obstacle.size}px`;
+        obstacle.el.style.transform = `translate3d(${obstacle.x}px, ${y}px, 0)`;
+
+        const left = obstacle.x;
+        const right = obstacle.x + obstacle.size;
+        const top = y;
+        const bottom = y + obstacle.size;
+
+        const ballCenterX = left + obstacle.size / 2;
+        const ballCenterY = top + obstacle.size / 2;
+        const nearestX = clamp(ballCenterX, runnerRect.left, runnerRect.right);
+        const nearestY = clamp(ballCenterY, runnerRect.top, runnerRect.bottom);
+        const dx = ballCenterX - nearestX;
+        const dy = ballCenterY - nearestY;
+        const collisionRadius = obstacle.size * 0.38;
+
+        if (dx * dx + dy * dy < collisionRadius * collisionRadius) {
+          obstacle.el.remove();
+          finishDividerGame();
+          return false;
+        }
+
+        if (!obstacle.counted && right < runnerRect.left) {
+          obstacle.counted = true;
+          dividerGameState.score += 1;
+          dividerGameLive.textContent = `Dodged ${dividerGameState.score}`;
+        }
+
+        if (right < -20) {
+          obstacle.el.remove();
+          return false;
+        }
+
+        return true;
+      });
+
+      if (!dividerGameState.active) return;
+      dividerGameState.rafId = window.requestAnimationFrame(runDividerGame);
+    }
+
+    function startDividerGame() {
+      if (dividerGameState.active) {
+        jumpDividerRunner();
+        return;
+      }
+
+      window.clearTimeout(dividerGameState.resetTimer);
+      dividerGameState.active = true;
+      dividerGameState.rafId = 0;
+      dividerGameState.lastFrame = 0;
+      dividerGameState.startTime = 0;
+      dividerGameState.lastSpawn = 0;
+      dividerGameState.score = 0;
+      dividerGameState.jumpVelocity = 0;
+      dividerGameState.jumpOffset = 0;
+      dividerGameState.runPhase = 0;
+      dividerGameState.obstacles = [];
+      sectionDivider.classList.add("is-game");
+      dividerGame.setAttribute("aria-hidden", "false");
+      resetDividerGameUI();
+      dividerGameHint.textContent = "Click or press Enter to jump";
+      dividerGameState.rafId = window.requestAnimationFrame(runDividerGame);
+    }
+
     async function copyProjection(raceLabel, minPerKm) {
       const race = RACES.find((item) => item.label === raceLabel);
       if (!race) return;
@@ -1724,9 +2129,20 @@
       input.focus();
     });
 
+    sectionDivider.addEventListener("click", () => {
+      startDividerGame();
+    });
+
     input.addEventListener("input", render);
     gapGradeInput.addEventListener("input", render);
     splitBiasInput.addEventListener("input", render);
+    window.addEventListener("keydown", (event) => {
+      if (!dividerGameState.active) return;
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        jumpDividerRunner();
+      }
+    });
 
     document.querySelectorAll(".result-card").forEach((card) => {
       card.addEventListener("click", () => {
