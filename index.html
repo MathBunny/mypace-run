@@ -712,6 +712,12 @@
       transform: scale(0.99);
     }
 
+    .result-card.is-copied {
+      background: linear-gradient(180deg, #ffffff, #fff1e7);
+      border-color: rgba(252, 82, 0, 0.42);
+      box-shadow: 0 18px 34px rgba(252, 82, 0, 0.14);
+    }
+
     .result-label {
       margin-bottom: 8px;
       font-size: 0.75rem;
@@ -829,6 +835,12 @@
       transform: translateY(-2px);
       box-shadow: 0 18px 34px rgba(252, 82, 0, 0.08);
       background: linear-gradient(180deg, #ffffff, #fff8f4);
+    }
+
+    .projection-card.is-copied {
+      border-color: rgba(252, 82, 0, 0.42);
+      background: linear-gradient(180deg, #ffffff, #fff1e7);
+      box-shadow: 0 18px 34px rgba(252, 82, 0, 0.14);
     }
 
     .projection-card.is-record-fast {
@@ -1102,6 +1114,11 @@
 
     .table-copy:hover {
       background: rgba(252, 82, 0, 0.08);
+      color: var(--accent-strong);
+    }
+
+    .table-copy.is-copied {
+      background: rgba(252, 82, 0, 0.12);
       color: var(--accent-strong);
     }
 
@@ -1533,6 +1550,44 @@
       resetCopiedStateSoon();
     }
 
+    function showCopyFeedback(trigger, options = {}) {
+      if (!trigger) return;
+
+      const {
+        activeClass = "is-copied",
+        labelSelector = "",
+        copiedLabel = "Copied",
+      } = options;
+
+      trigger.classList.add(activeClass);
+      window.clearTimeout(trigger._copyFeedbackTimer);
+
+      let labelEl = null;
+      let originalLabel = "";
+
+      if (labelSelector) {
+        labelEl = trigger.querySelector(labelSelector);
+        if (labelEl) {
+          originalLabel = trigger.dataset.copyFeedbackOriginalLabel || labelEl.textContent;
+          trigger.dataset.copyFeedbackOriginalLabel = originalLabel;
+          labelEl.textContent = copiedLabel;
+        }
+      } else {
+        originalLabel = trigger.dataset.copyFeedbackOriginalText || trigger.textContent;
+        trigger.dataset.copyFeedbackOriginalText = originalLabel;
+        trigger.textContent = copiedLabel;
+      }
+
+      trigger._copyFeedbackTimer = window.setTimeout(() => {
+        trigger.classList.remove(activeClass);
+        if (labelEl) {
+          labelEl.textContent = trigger.dataset.copyFeedbackOriginalLabel || originalLabel;
+        } else if (originalLabel) {
+          trigger.textContent = trigger.dataset.copyFeedbackOriginalText || originalLabel;
+        }
+      }, 1100);
+    }
+
     function clamp(value, min, max) {
       return Math.min(max, Math.max(min, value));
     }
@@ -1818,7 +1873,7 @@
 
       projectionContent.querySelectorAll("[data-projection-copy]").forEach((button) => {
         button.addEventListener("click", () => {
-          copyProjection(button.dataset.projectionCopy, results.minPerKm);
+          copyProjection(button.dataset.projectionCopy, results.minPerKm, button);
         });
       });
     }
@@ -1922,7 +1977,7 @@
 
       gapTableWrap.querySelectorAll("[data-copy-value]").forEach((button) => {
         button.addEventListener("click", () => {
-          copyText(button.dataset.copyValue);
+          copyText(button.dataset.copyValue, button, { copiedLabel: "Copied" });
         });
       });
     }
@@ -1988,7 +2043,7 @@
 
       splitsTableWrap.querySelectorAll("[data-copy-value]").forEach((button) => {
         button.addEventListener("click", () => {
-          copyText(button.dataset.copyValue);
+          copyText(button.dataset.copyValue, button, { copiedLabel: "Copied" });
         });
       });
     }
@@ -2153,21 +2208,25 @@
       dividerGameState.rafId = window.requestAnimationFrame(runDividerGame);
     }
 
-    async function copyProjection(raceLabel, minPerKm) {
+    async function copyProjection(raceLabel, minPerKm, trigger) {
       const race = RACES.find((item) => item.label === raceLabel);
       if (!race) return;
 
       const text = `${race.label}: ${secondsToClock(minPerKm * race.distanceKm * 60)}`;
 
-      copyText(text);
+      copyText(text, trigger, {
+        labelSelector: ".projection-copy-hint span:last-child",
+        copiedLabel: "Copied",
+      });
     }
 
-    async function copyText(text) {
+    async function copyText(text, trigger, feedbackOptions) {
       if (!text) return;
 
       try {
         await navigator.clipboard.writeText(text);
         setCopiedState(`Copied ${text}`);
+        showCopyFeedback(trigger, feedbackOptions);
       } catch {
         copiedState.textContent = "Copy failed";
       }
@@ -2190,7 +2249,7 @@
       outputEls.mph.textContent = results ? String(round(results.mph, 2)) : "—";
     }
 
-    async function copyByType(type) {
+    async function copyByType(type, trigger) {
       const parsed = parsePaceLike(input.value);
       const results = convert(parsed);
       if (!results) return;
@@ -2200,7 +2259,10 @@
       if (type === "minPerMile") text = `${decimalMinutesToPace(results.minPerMile)} /mi`;
       if (type === "kmh") text = `${round(results.kmh, 2)} km/h`;
       if (type === "mph") text = `${round(results.mph, 2)} mph`;
-      copyText(text);
+      copyText(text, trigger, {
+        labelSelector: ".result-suffix span:last-child",
+        copiedLabel: "Copied",
+      });
     }
 
     function hydrateInputFromQuery() {
@@ -2283,7 +2345,7 @@
 
     document.querySelectorAll(".result-card").forEach((card) => {
       card.addEventListener("click", () => {
-        copyByType(card.dataset.copyType);
+        copyByType(card.dataset.copyType, card);
       });
     });
 
