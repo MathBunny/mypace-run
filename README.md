@@ -5,7 +5,7 @@ Fast, simple running pace conversion with minimal clicks. 🏃
 Live site: [http://mypace.run](http://mypace.run) ✨
 
 <p align="center">
-  <img src="https://i.imgur.com/Az7J3UX.png" alt="mypace.run screenshot" width="1200" />
+  <img src="https://i.imgur.com/eXSG7lU.png" alt="mypace.run screenshot" width="1200" />
 </p>
 
 `mypace.run` is a sleek, mobile-first pace tool built for runners who want answers instantly.

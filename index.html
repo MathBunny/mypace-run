@@ -1297,6 +1297,7 @@
       </div>
 
       <h1>One input. Every pace.</h1>
+      <p>Effortless and fast pace conversion for all runners.</p>
     </div>
 
     <div class="input-wrap">
@@ -1304,7 +1305,7 @@
         <div class="panel-inner">
           <div class="input-row">
             <span class="leading-icon">↔</span>
-            <input id="paceInput" class="pace-input" value="5:30/km" placeholder="Try 5:30/km or 8.2 mph" />
+            <input id="paceInput" class="pace-input" value="5:30" placeholder="Type a number. Use the quick unit below to change units." inputmode="text" autocomplete="off" spellcheck="false" />
             <button id="clearBtn" class="ghost-btn" aria-label="Clear input">
               <span class="reset-icon">⟲</span>
             </button>
@@ -1319,7 +1320,6 @@
             <span class="unit-rail-hint" aria-hidden="true">Tab switches units</span>
           </div>
 
-          <div class="chips" id="chips"></div>
           <div class="helper" id="helperText"></div>
         </div>
       </div>
@@ -1479,15 +1479,6 @@
   </div>
 
   <script>
-    const EXAMPLES = [
-      "5:30/km",
-      "7:15/mi",
-      "13.3 km/h",
-      "8.2 mph",
-      "4.5 min/km",
-      "7.5 min/mi",
-    ];
-
     const RACES = [
       { label: "5K", distanceKm: 5 },
       { label: "10K", distanceKm: 10 },
@@ -1507,7 +1498,6 @@
     const input = document.getElementById("paceInput");
     const helperText = document.getElementById("helperText");
     const copiedState = document.getElementById("copiedState");
-    const chips = document.getElementById("chips");
     const clearBtn = document.getElementById("clearBtn");
     const unitRail = document.getElementById("unitRail");
     const sectionDivider = document.getElementById("sectionDivider");
@@ -1531,6 +1521,7 @@
     const splitBiasValue = document.getElementById("splitBiasValue");
     const splitsTableWrap = document.getElementById("splitsTableWrap");
 
+    let currentInputType = "minPerKm";
     let selectedVdotRace = "5K";
     let selectedSplitRace = "5K";
     let hasAutoSelectedInput = false;
@@ -1558,6 +1549,22 @@
     function round(value, digits = 2) {
       const factor = 10 ** digits;
       return Math.round(value * factor) / factor;
+    }
+
+    function getInputTypeLabel(type = currentInputType) {
+      if (type === "minPerKm") return "min/km";
+      if (type === "minPerMile") return "min/mi";
+      if (type === "kmh") return "km/h";
+      if (type === "mph") return "mph";
+      return type;
+    }
+
+    function shouldRefocusInputAfterUnitChange() {
+      return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    }
+
+    function updateInputPlaceholder() {
+      input.placeholder = "Type a number. Use the quick unit below to change units.";
     }
 
     function resetCopiedStateSoon() {
@@ -1634,9 +1641,9 @@
       return `${minutes}:${String(seconds).padStart(2, "0")}`;
     }
 
-    function getPreferredSystem(parsed) {
-      if (!parsed) return "metric";
-      return parsed.type === "mph" || parsed.type === "minPerMile" ? "imperial" : "metric";
+    function getPreferredSystem(type = currentInputType) {
+      if (!type) return "metric";
+      return type === "mph" || type === "minPerMile" ? "imperial" : "metric";
     }
 
     function formatPaceForSystem(totalSeconds, distanceKm, system) {
@@ -1661,35 +1668,15 @@
       return RACES.find((race) => race.label === label);
     }
 
-    function getUnitSuffix(type) {
-      if (type === "minPerKm") return " /km";
-      if (type === "minPerMile") return " /mi";
-      if (type === "kmh") return " km/h";
-      if (type === "mph") return " mph";
-      return "";
-    }
-
-    function applyUnitToRawInput(value, type) {
-      const trimmed = value.trim();
-      if (!trimmed) return "";
-
-      const withoutUnit = trimmed
-        .replace(/\s*(km\/h|kph|kmh|mph|min\/km|min\/mi|min\/mile|\/km|\/mi|per km|per mile)\s*$/i, "")
-        .trim();
-
-      if (!withoutUnit) return "";
-      return `${withoutUnit}${getUnitSuffix(type)}`;
-    }
-
-    function refreshUnitRail(parsed) {
+    function refreshUnitRail() {
       unitRail.querySelectorAll("[data-unit-target]").forEach((button) => {
-        button.classList.toggle("is-active", button.dataset.unitTarget === (parsed && parsed.type));
+        button.classList.toggle("is-active", button.dataset.unitTarget === currentInputType);
       });
     }
 
-    function refreshActiveResultCard(parsed) {
+    function refreshActiveResultCard() {
       document.querySelectorAll(".result-card").forEach((card) => {
-        card.classList.toggle("is-active-unit", card.dataset.copyType === (parsed && parsed.type));
+        card.classList.toggle("is-active-unit", card.dataset.copyType === currentInputType);
       });
     }
 
@@ -1785,37 +1772,52 @@
       return rows;
     }
 
-    function parsePaceLike(value) {
-      const trimmed = value.trim().toLowerCase();
+    function sanitizeNumericInput(value) {
+      const raw = value.replace(/[^\d:.]/g, "");
+      let hasColon = false;
+      let hasDot = false;
+      let sanitized = "";
+
+      for (const char of raw) {
+        if (/\d/.test(char)) {
+          sanitized += char;
+          continue;
+        }
+
+        if (char === ":" && !hasColon && !hasDot) {
+          hasColon = true;
+          sanitized += char;
+          continue;
+        }
+
+        if (char === "." && !hasDot && !hasColon) {
+          hasDot = true;
+          sanitized += char;
+        }
+      }
+
+      return sanitized;
+    }
+
+    function parsePaceLike(value, type = currentInputType) {
+      const trimmed = sanitizeNumericInput(value.trim().toLowerCase());
       if (!trimmed) return null;
 
-      const mmss = trimmed.match(/^(\d{1,2})\s*:\s*(\d{1,2})(?:\s*(?:min)?)?\s*(?:\/|per)?\s*(km|mi|mile)?$/);
+      const mmss = trimmed.match(/^(\d{1,2}):(\d{1,2})$/);
       if (mmss) {
         const minutes = Number(mmss[1]);
         const seconds = Number(mmss[2]);
-        const unit = mmss[3] || "km";
+        if (seconds >= 60) return null;
         return {
-          type: unit.startsWith("mi") ? "minPerMile" : "minPerKm",
+          type,
           value: minutes + seconds / 60,
         };
       }
 
-      const numeric = trimmed.match(/^(\d+(?:\.\d+)?)\s*(km\/h|kph|kmh|mph|min\/km|min\/mi|min\/mile|\/km|\/mi|per km|per mile)$/);
+      const numeric = trimmed.match(/^(\d+(?:\.\d+)?)$/);
       if (numeric) {
         const amount = Number(numeric[1]);
-        const unit = numeric[2];
-        if (["km/h", "kph", "kmh"].includes(unit)) return { type: "kmh", value: amount };
-        if (unit === "mph") return { type: "mph", value: amount };
-        if (["min/km", "/km", "per km"].includes(unit)) return { type: "minPerKm", value: amount };
-        if (["min/mi", "min/mile", "/mi", "per mile"].includes(unit)) return { type: "minPerMile", value: amount };
-      }
-
-      const rawNumber = trimmed.match(/^(\d+(?:\.\d+)?)$/);
-      if (rawNumber) {
-        const amount = Number(rawNumber[1]);
-        if (amount >= 2.5 && amount <= 8) return { type: "minPerKm", value: amount };
-        if (amount > 8 && amount <= 20) return { type: "kmh", value: amount };
-        if (amount > 20) return { type: "mph", value: amount };
+        return { type, value: amount };
       }
 
       return null;
@@ -1851,27 +1853,14 @@
 
     function setHelperText(inputValue, parsed) {
       if (!inputValue.trim()) {
-        helperText.textContent = "Type one pace or speed. The app infers the unit instantly.";
+        helperText.textContent = `Type only a number like 5:30 or 5.5. The active unit is ${getInputTypeLabel()}.`;
         return;
       }
       if (!parsed) {
-        helperText.textContent = "Try formats like 5:30/km, 7:15/mi, 13.3 km/h, or 8.2 mph.";
+        helperText.textContent = "Use digits with an optional : or . only. Units now live in the quick toggles below.";
         return;
       }
-      switch (parsed.type) {
-        case "kmh":
-          helperText.textContent = "";
-          return;
-        case "mph":
-          helperText.textContent = "";
-          return;
-        case "minPerKm":
-          helperText.textContent = "";
-          return;
-        case "minPerMile":
-          helperText.textContent = "";
-          return;
-      }
+      helperText.textContent = "";
     }
 
     function renderProjections(results) {
@@ -1913,8 +1902,7 @@
         return;
       }
 
-      const parsed = parsePaceLike(input.value);
-      const preferredSystem = getPreferredSystem(parsed);
+      const preferredSystem = getPreferredSystem(currentInputType);
       const selectedRace = RACES.find((race) => race.label === selectedVdotRace) || RACES[0];
       const selectedTimeMinutes = results.minPerKm * selectedRace.distanceKm;
       const vdot = calculateVdot(selectedRace.distanceKm * 1000, selectedTimeMinutes);
@@ -2036,8 +2024,7 @@
         return;
       }
 
-      const parsed = parsePaceLike(input.value);
-      const preferredSystem = getPreferredSystem(parsed);
+      const preferredSystem = getPreferredSystem(currentInputType);
       const selectedRace = getRaceByLabel(selectedSplitRace) || RACES[0];
       const rows = buildSplitRows(selectedRace.distanceKm, preferredSystem, results.minPerKm, splitBias);
       const unitLabel = preferredSystem === "imperial" ? "mi" : "km";
@@ -2261,12 +2248,18 @@
     }
 
     function render() {
-      const parsed = parsePaceLike(input.value);
+      const sanitizedValue = sanitizeNumericInput(input.value);
+      if (input.value !== sanitizedValue) {
+        input.value = sanitizedValue;
+      }
+
+      const parsed = parsePaceLike(input.value, currentInputType);
       const results = convert(parsed);
 
+      updateInputPlaceholder();
       setHelperText(input.value, parsed);
-      refreshUnitRail(parsed);
-      refreshActiveResultCard(parsed);
+      refreshUnitRail();
+      refreshActiveResultCard();
       renderProjections(results);
       renderVdotPanel(results);
       renderGapTable(results);
@@ -2279,7 +2272,7 @@
     }
 
     async function copyByType(type, trigger) {
-      const parsed = parsePaceLike(input.value);
+      const parsed = parsePaceLike(input.value, currentInputType);
       const results = convert(parsed);
       if (!results) return;
 
@@ -2299,29 +2292,16 @@
         ? window.location.search.slice(1)
         : window.location.search;
       if (rawSearch && !rawSearch.includes("=")) {
-        input.value = decodeURIComponent(rawSearch.replace(/\+/g, " "));
+        input.value = sanitizeNumericInput(decodeURIComponent(rawSearch.replace(/\+/g, " ")));
         return;
       }
 
       const params = new URLSearchParams(window.location.search);
       const seededValue = params.get("q") || params.get("pace") || params.get("value");
       if (seededValue) {
-        input.value = seededValue;
+        input.value = sanitizeNumericInput(seededValue);
       }
     }
-
-    EXAMPLES.forEach((example) => {
-      const button = document.createElement("button");
-      button.className = "chip";
-      button.type = "button";
-      button.textContent = example;
-      button.addEventListener("click", () => {
-        input.value = example;
-        render();
-        input.focus();
-      });
-      chips.appendChild(button);
-    });
 
     clearBtn.addEventListener("click", () => {
       input.value = "";
@@ -2339,9 +2319,11 @@
 
     unitRail.querySelectorAll("[data-unit-target]").forEach((button) => {
       button.addEventListener("click", () => {
-        input.value = applyUnitToRawInput(input.value, button.dataset.unitTarget);
+        currentInputType = button.dataset.unitTarget;
         render();
-        input.focus();
+        if (shouldRefocusInputAfterUnitChange()) {
+          input.focus();
+        }
       });
     });
 
