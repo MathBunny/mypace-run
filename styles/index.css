@@ -1132,10 +1132,24 @@
     .panel-chevron {
       width: 36px;
       height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
       border-radius: 999px;
       border: 1px solid rgba(252, 82, 0, 0.14);
       background: rgba(255, 248, 243, 0.92);
       transition: transform 0.2s ease, background 0.15s ease;
+    }
+
+    .panel-chevron::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: translateY(-2px) rotate(45deg);
+      transform-origin: center;
     }
 
     .projection-panel[open] .panel-chevron {
