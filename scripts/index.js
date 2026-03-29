@@ -89,6 +89,14 @@
       "splitsPanel",
     ].map((id) => document.getElementById(id)).filter(Boolean);
 
+    const TOOLTIP_WRAPS = Array.from(document.querySelectorAll(".tooltip-wrap"));
+
+    function setTooltipPanelState(wrap, isOpen) {
+      const panel = wrap.closest(".projection-panel");
+      if (!panel) return;
+      panel.classList.toggle("has-tooltip-open", isOpen);
+    }
+
     function round(value, digits = 2) {
       const factor = 10 ** digits;
       return Math.round(value * factor) / factor;
@@ -1135,6 +1143,66 @@
     document.querySelectorAll(".result-card").forEach((card) => {
       card.addEventListener("click", () => {
         copyByType(card.dataset.copyType, card);
+      });
+    });
+
+    TOOLTIP_WRAPS.forEach((wrap) => {
+      const trigger = wrap.querySelector("[data-tooltip-trigger]");
+      if (!trigger) return;
+
+      wrap.addEventListener("mouseenter", () => {
+        setTooltipPanelState(wrap, true);
+      });
+
+      wrap.addEventListener("mouseleave", () => {
+        if (!wrap.classList.contains("is-open")) {
+          setTooltipPanelState(wrap, false);
+        }
+      });
+
+      wrap.addEventListener("focusin", () => {
+        setTooltipPanelState(wrap, true);
+      });
+
+      wrap.addEventListener("focusout", () => {
+        window.setTimeout(() => {
+          if (!wrap.matches(":focus-within") && !wrap.classList.contains("is-open")) {
+            setTooltipPanelState(wrap, false);
+          }
+        }, 0);
+      });
+
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const willOpen = !wrap.classList.contains("is-open");
+        TOOLTIP_WRAPS.forEach((item) => {
+          item.classList.remove("is-open");
+          setTooltipPanelState(item, false);
+          const itemTrigger = item.querySelector("[data-tooltip-trigger]");
+          if (itemTrigger) {
+            itemTrigger.setAttribute("aria-expanded", "false");
+          }
+        });
+
+        if (willOpen) {
+          wrap.classList.add("is-open");
+          setTooltipPanelState(wrap, true);
+          trigger.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (event.target.closest(".tooltip-wrap")) return;
+      TOOLTIP_WRAPS.forEach((wrap) => {
+        wrap.classList.remove("is-open");
+        setTooltipPanelState(wrap, false);
+        const trigger = wrap.querySelector("[data-tooltip-trigger]");
+        if (trigger) {
+          trigger.setAttribute("aria-expanded", "false");
+        }
       });
     });
 

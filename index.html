@@ -175,7 +175,15 @@
     <details class="projection-panel vdot-panel" id="vdotPanel">
       <summary class="projection-summary">
         <div class="projection-copy">
-          <div class="projection-eyebrow">VDOT Equivalents</div>
+          <div class="projection-eyebrow-row">
+            <div class="projection-eyebrow">VDOT Equivalents</div>
+            <div class="tooltip-wrap">
+              <button class="tooltip-trigger" type="button" aria-label="Explain VDOT equivalents" data-tooltip-trigger aria-expanded="false">i</button>
+              <div class="tooltip-bubble" role="tooltip">
+                VDOT is a Daniels-style fitness estimate derived from a race result. Selecting a race treats your current pace as that race effort, then back-solves equivalent performances for the others.
+              </div>
+            </div>
+          </div>
           <div class="projection-subtitle" id="vdotSubtitle">Choose a race below to treat the current input as that race pace.</div>
         </div>
         <span class="panel-chevron" aria-hidden="true">⌄</span>
@@ -201,7 +209,15 @@
     <details class="projection-panel vdot-panel" id="gapPanel">
       <summary class="projection-summary">
         <div class="projection-copy">
-          <div class="projection-eyebrow">Grade Adjusted Pace</div>
+          <div class="projection-eyebrow-row">
+            <div class="projection-eyebrow">Grade Adjusted Pace</div>
+            <div class="tooltip-wrap">
+              <button class="tooltip-trigger" type="button" aria-label="Explain grade adjusted pace" data-tooltip-trigger aria-expanded="false">i</button>
+              <div class="tooltip-bubble" role="tooltip">
+                GAP estimates what your effort on an uphill or downhill grade would feel like on flat ground. It is best used as a practical training comparison, not a perfect physiological model.
+              </div>
+            </div>
+          </div>
           <div class="projection-subtitle" id="gapSubtitle">Adjust the grade to see the equivalent flat pace across units.</div>
         </div>
         <span class="panel-chevron" aria-hidden="true">⌄</span>
@@ -232,7 +248,15 @@
           <div class="toggle-row" id="splitToggleRow"></div>
           <label class="slider-control">
             <div class="slider-header">
-              <span>Split Bias</span>
+              <span class="slider-label-row">
+                <span>Split Bias</span>
+                <span class="tooltip-wrap">
+                  <button class="tooltip-trigger" type="button" aria-label="Explain split bias" data-tooltip-trigger aria-expanded="false">i</button>
+                  <span class="tooltip-bubble" role="tooltip">
+                    Negative bias means faster later splits. Positive bias means faster early splits. The total race time stays the same while the split distribution shifts.
+                  </span>
+                </span>
+              </span>
               <span id="splitBiasValue">Even</span>
             </div>
             <input id="splitBiasInput" class="slider-range" type="range" min="-20" max="20" step="1" value="0" />

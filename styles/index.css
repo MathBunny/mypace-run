@@ -509,7 +509,7 @@
     .recent-chip:hover {
       background: rgba(255, 241, 231, 0.96);
       transform: translateY(-1px);
-      border-color: rgba(252, 82, 0, 0.2);
+      border-color: rgba(252, 82, 0, 0.18);
     }
 
     .recent-clear {
@@ -928,11 +928,104 @@
       gap: 6px;
     }
 
+    .projection-eyebrow-row,
+    .slider-label-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
     .projection-eyebrow {
       font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.18em;
       color: var(--muted-light);
+    }
+
+    .tooltip-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .tooltip-trigger {
+      width: 18px;
+      height: 18px;
+      border: 1px solid rgba(252, 82, 0, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 247, 240, 0.92);
+      color: var(--accent-strong);
+      font-size: 0.7rem;
+      font-weight: 700;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .tooltip-trigger:hover,
+    .tooltip-wrap.is-open .tooltip-trigger,
+    .tooltip-trigger:focus-visible {
+      background: rgba(255, 236, 224, 0.98);
+      border-color: rgba(252, 82, 0, 0.3);
+      box-shadow: 0 10px 20px rgba(252, 82, 0, 0.08);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .tooltip-bubble {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      width: min(280px, calc(100vw - 40px));
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(252, 82, 0, 0.14);
+      background: rgba(255, 252, 248, 0.98);
+      color: #7a685d;
+      font-size: 0.79rem;
+      line-height: 1.5;
+      box-shadow: 0 18px 34px rgba(143, 63, 18, 0.1);
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-50%) translateY(-4px);
+      transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+      z-index: 12;
+      text-transform: none;
+      letter-spacing: normal;
+      pointer-events: none;
+    }
+
+    .tooltip-bubble::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      background: rgba(255, 252, 248, 0.98);
+      border-left: 1px solid rgba(252, 82, 0, 0.14);
+      border-top: 1px solid rgba(252, 82, 0, 0.14);
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .tooltip-wrap:hover .tooltip-bubble,
+    .tooltip-wrap:focus-within .tooltip-bubble,
+    .tooltip-wrap.is-open .tooltip-bubble {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    .projection-panel.has-tooltip-open {
+      overflow: visible;
+      z-index: 6;
     }
 
     .projection-subtitle {
@@ -1273,6 +1366,33 @@
       color: #0f2744;
     }
 
+    html[data-theme="dark"] .tooltip-trigger {
+      border-color: rgba(245, 158, 11, 0.22);
+      background: rgba(20, 34, 55, 0.92);
+      color: #f6b34d;
+    }
+
+    html[data-theme="dark"] .tooltip-trigger:hover,
+    html[data-theme="dark"] .tooltip-wrap.is-open .tooltip-trigger,
+    html[data-theme="dark"] .tooltip-trigger:focus-visible {
+      background: rgba(28, 46, 74, 0.98);
+      border-color: rgba(245, 158, 11, 0.36);
+      box-shadow: 0 12px 24px rgba(0, 5, 18, 0.28);
+    }
+
+    html[data-theme="dark"] .tooltip-bubble {
+      border-color: rgba(130, 192, 255, 0.14);
+      background: rgba(13, 24, 41, 0.98);
+      color: #b9cbe3;
+      box-shadow: 0 18px 34px rgba(0, 5, 18, 0.34);
+    }
+
+    html[data-theme="dark"] .tooltip-bubble::before {
+      background: rgba(13, 24, 41, 0.98);
+      border-left-color: rgba(130, 192, 255, 0.14);
+      border-top-color: rgba(130, 192, 255, 0.14);
+    }
+
     .table-wrap {
       overflow-x: auto;
       border: 1px solid rgba(236, 220, 207, 0.95);
@@ -1475,6 +1595,23 @@
 
       .projection-summary {
         align-items: flex-start;
+      }
+
+      .tooltip-bubble {
+        left: 0;
+        transform: translateX(0) translateY(-4px);
+      }
+
+      .tooltip-bubble::before {
+        left: 14px;
+        top: -6px;
+        transform: rotate(45deg);
+      }
+
+      .tooltip-wrap:hover .tooltip-bubble,
+      .tooltip-wrap:focus-within .tooltip-bubble,
+      .tooltip-wrap.is-open .tooltip-bubble {
+        transform: translateX(0) translateY(0);
       }
     }
 
