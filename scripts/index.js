@@ -127,6 +127,13 @@
       applyTheme("light");
     }
 
+    function registerServiceWorker() {
+      if (!("serviceWorker" in navigator)) return;
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").catch(() => {});
+      });
+    }
+
     function triggerLightHaptic() {
       if (typeof navigator.vibrate === "function") {
         navigator.vibrate(12);
@@ -1216,6 +1223,7 @@
     });
 
     loadThemePreference();
+    registerServiceWorker();
     loadRecentEntries();
     renderRecentEntries();
     hydrateInputFromQuery();

@@ -48,6 +48,7 @@ The result is a running utility that feels fast enough to use mid-workout, on th
 ### UX Details 🎯
 
 - Mobile-first layout
+- PWA support for installability and offline-friendly repeat use
 - Desktop-only advanced section “unzip” interaction to reduce information overload
 - Copy affordances across cards and tables
 - Query-string hydration for prefilled pace input
@@ -58,11 +59,15 @@ The result is a running utility that feels fast enough to use mid-workout, on th
 
 Everything runs inline in the HTML with JavaScript so the site stays lightweight and easy to deploy.
 There is no backend required.
+The site also includes a lightweight PWA setup with a web app manifest, app icons, and a service worker for core static asset caching.
 
 ## Project Structure
 
 - `index.html`: main app, styles, interactions, and calculator logic
 - `about.html`: SEO-friendly About page
+- `manifest.webmanifest`: installable PWA metadata
+- `sw.js`: lightweight service worker for static asset caching
+- `icon-192.png` / `icon-512.png`: PWA app icons
 - `README.md`: project overview
 
 ## Local Development 💻

@@ -26,10 +26,18 @@
       applyTheme("light");
     }
 
+    function registerServiceWorker() {
+      if (!("serviceWorker" in navigator)) return;
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").catch(() => {});
+      });
+    }
+
     themeToggleBtn.addEventListener("click", () => {
       const isDark = document.documentElement.getAttribute("data-theme") === "dark";
       applyTheme(isDark ? "light" : "dark");
     });
 
     loadThemePreference();
+    registerServiceWorker();
   
