@@ -477,6 +477,86 @@
       color: var(--muted);
     }
 
+    .prefill-tip {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(252, 82, 0, 0.12);
+      background: rgba(255, 250, 246, 0.92);
+      color: var(--muted);
+      box-shadow: 0 12px 22px rgba(143, 63, 18, 0.06);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .prefill-tip[hidden] {
+      display: none !important;
+    }
+
+    .prefill-tip.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .prefill-tip.is-hiding {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+
+    .prefill-tip-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .prefill-tip-eyebrow {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-strong);
+      white-space: nowrap;
+    }
+
+    .prefill-tip-text {
+      font-size: 0.79rem;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .prefill-tip-text strong {
+      color: var(--accent-strong);
+      font-weight: 600;
+    }
+
+    .prefill-tip-close {
+      width: 24px;
+      height: 24px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted-light);
+      cursor: pointer;
+      font-size: 0.95rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .prefill-tip-close:hover {
+      background: rgba(252, 82, 0, 0.08);
+      color: var(--accent-strong);
+    }
+
     .recent-wrap {
       display: flex;
       flex-wrap: wrap;
@@ -854,6 +934,22 @@
 
     html[data-theme="dark"] .result-card.is-active-unit .result-suffix {
       color: #f2c47a;
+    }
+
+    html[data-theme="dark"] .prefill-tip {
+      border-color: rgba(130, 192, 255, 0.14);
+      background: rgba(12, 23, 40, 0.92);
+      box-shadow: 0 16px 30px rgba(0, 5, 18, 0.22);
+    }
+
+    html[data-theme="dark"] .prefill-tip-eyebrow,
+    html[data-theme="dark"] .prefill-tip-text strong {
+      color: #f6b34d;
+    }
+
+    html[data-theme="dark"] .prefill-tip-close:hover {
+      background: rgba(245, 158, 11, 0.1);
+      color: #f6b34d;
     }
 
     .result-label {
@@ -1620,6 +1716,14 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
+      }
+
+      .prefill-tip {
+        display: flex;
+      }
+
+      .prefill-tip[hidden] {
+        display: none !important;
       }
     }
   

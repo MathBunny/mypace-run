@@ -22,6 +22,8 @@
     const clearBtn = document.getElementById("clearBtn");
     const shareSetupBtn = document.getElementById("shareSetupBtn");
     const recentWrap = document.getElementById("recentWrap");
+    const prefillTip = document.getElementById("prefillTip");
+    const prefillTipClose = document.getElementById("prefillTipClose");
     const unitRail = document.getElementById("unitRail");
     const sectionDivider = document.getElementById("sectionDivider");
     const dividerGame = document.getElementById("dividerGame");
@@ -90,6 +92,10 @@
     ].map((id) => document.getElementById(id)).filter(Boolean);
 
     const TOOLTIP_WRAPS = Array.from(document.querySelectorAll(".tooltip-wrap"));
+    let prefillTipTimer = 0;
+    let prefillTipHideTimer = 0;
+    let prefillInputChangeCount = 0;
+    let lastTrackedPrefillValue = sanitizeNumericInput(input.value || "");
 
     function setTooltipPanelState(wrap, isOpen) {
       const panel = wrap.closest(".projection-panel");
@@ -227,6 +233,68 @@
         renderRecentEntries();
       });
       recentWrap.appendChild(clearButton);
+    }
+
+    function canShowPrefillTip() {
+      if (!prefillTip) return false;
+      if (window.innerWidth < 901) return false;
+      if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return false;
+      if (prefillInputChangeCount < 3) return false;
+      try {
+        return window.localStorage.getItem("mypacePrefillTipSeen") !== "true";
+      } catch {
+        return true;
+      }
+    }
+
+    function markPrefillTipSeen() {
+      try {
+        window.localStorage.setItem("mypacePrefillTipSeen", "true");
+      } catch {}
+    }
+
+    function hidePrefillTip(immediate = false) {
+      if (!prefillTip || prefillTip.hidden) return;
+      window.clearTimeout(prefillTipTimer);
+      window.clearTimeout(prefillTipHideTimer);
+      markPrefillTipSeen();
+
+      if (immediate) {
+        prefillTip.classList.remove("is-visible", "is-hiding");
+        prefillTip.hidden = true;
+        return;
+      }
+
+      prefillTip.classList.remove("is-visible");
+      prefillTip.classList.add("is-hiding");
+      prefillTipHideTimer = window.setTimeout(() => {
+        prefillTip.classList.remove("is-hiding");
+        prefillTip.hidden = true;
+      }, 280);
+    }
+
+    function showPrefillTip() {
+      if (!canShowPrefillTip()) {
+        if (prefillTip) prefillTip.hidden = true;
+        return;
+      }
+
+      prefillTip.hidden = false;
+      window.requestAnimationFrame(() => {
+        prefillTip.classList.add("is-visible");
+      });
+    }
+
+    function maybeShowPrefillTipAfterInput() {
+      const currentValue = sanitizeNumericInput(input.value || "");
+      if (!currentValue || currentValue === lastTrackedPrefillValue) return;
+
+      lastTrackedPrefillValue = currentValue;
+      prefillInputChangeCount += 1;
+
+      if (prefillInputChangeCount === 3) {
+        window.setTimeout(showPrefillTip, 450);
+      }
     }
 
     function saveRecentEntry(parsed) {
@@ -1087,6 +1155,7 @@
       input.value = "";
       render();
       input.focus();
+      hidePrefillTip(true);
     });
 
     themeToggleBtn.addEventListener("click", () => {
@@ -1096,11 +1165,19 @@
     shareSetupBtn.addEventListener("click", async () => {
       const shareUrl = buildShareUrl();
       await copyText(shareUrl, shareSetupBtn, { copiedLabel: "Copied link" });
+      hidePrefillTip(true);
     });
+
+    if (prefillTipClose) {
+      prefillTipClose.addEventListener("click", () => {
+        hidePrefillTip();
+      });
+    }
 
     input.addEventListener("focus", () => {
       if (hasAutoSelectedInput) return;
       hasAutoSelectedInput = true;
+      hidePrefillTip(true);
       window.requestAnimationFrame(() => {
         input.select();
       });
@@ -1110,6 +1187,7 @@
       button.addEventListener("click", () => {
         currentInputType = button.dataset.unitTarget;
         render();
+        hidePrefillTip(true);
         if (shouldRefocusInputAfterUnitChange()) {
           input.focus();
         }
@@ -1120,7 +1198,10 @@
       startDividerGame();
     });
 
-    input.addEventListener("input", render);
+    input.addEventListener("input", () => {
+      render();
+      maybeShowPrefillTipAfterInput();
+    });
     input.addEventListener("blur", () => {
       const parsed = parsePaceLike(input.value, currentInputType);
       saveRecentEntry(parsed);
