@@ -57,6 +57,25 @@
       --shadow: 0 18px 60px rgba(143, 63, 18, 0.09);
     }
 
+    html[data-theme="dark"] {
+      --bg: #07111f;
+      --card: rgba(12, 23, 40, 0.9);
+      --card-solid: #0f1b2d;
+      --border: #233650;
+      --text: #edf4ff;
+      --muted: #9bb0cc;
+      --muted-light: #6f88ab;
+      --accent: #4da3ff;
+      --accent-strong: #82c0ff;
+      --accent-soft: rgba(77, 163, 255, 0.12);
+      --accent-warm: #d97706;
+      --accent-warm-strong: #f59e0b;
+      --danger-soft: rgba(108, 31, 54, 0.32);
+      --danger-border: #7a3652;
+      --danger-text: #ffb8c8;
+      --shadow: 0 24px 60px rgba(0, 5, 18, 0.38);
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -65,9 +84,9 @@
       margin: 0;
       padding: 0;
       background:
-        radial-gradient(circle at top left, rgba(252, 82, 0, 0.08), transparent 34%),
-        radial-gradient(circle at top right, rgba(255, 212, 191, 0.28), transparent 28%),
-        linear-gradient(180deg, #fffdfa 0%, #f8f1ea 100%);
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 14%, transparent), transparent 34%),
+        radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 10%, transparent), transparent 28%),
+        linear-gradient(180deg, color-mix(in srgb, var(--bg) 65%, white) 0%, var(--bg) 100%);
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -251,7 +270,7 @@
       line-height: 1;
       letter-spacing: -0.04em;
       font-weight: 600;
-      color: #201713;
+      color: var(--text);
     }
 
     .hero p {
@@ -259,7 +278,7 @@
       max-width: 36rem;
       font-size: clamp(1rem, 2.5vw, 1.125rem);
       line-height: 1.75;
-      color: #6f6158;
+      color: var(--muted);
     }
 
     .input-wrap {
@@ -272,7 +291,7 @@
     .panel {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 243, 0.96));
+      background: linear-gradient(180deg, color-mix(in srgb, var(--card-solid) 94%, white), color-mix(in srgb, var(--card-solid) 88%, var(--bg)));
       border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 28px;
       padding: 16px;
@@ -298,6 +317,30 @@
       z-index: 1;
     }
 
+    .utility-btn {
+      border: 1px solid rgba(252, 82, 0, 0.14);
+      background: rgba(255, 247, 240, 0.78);
+      color: #7a4a2d;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .utility-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 236, 224, 0.96);
+    }
+
+    .utility-btn.is-copied {
+      background: linear-gradient(180deg, #ffffff, #fff1e7);
+      border-color: rgba(252, 82, 0, 0.42);
+      box-shadow: 0 14px 28px rgba(252, 82, 0, 0.14);
+      color: var(--accent-strong);
+    }
+
     .input-row {
       display: flex;
       align-items: center;
@@ -313,6 +356,35 @@
       border-color: rgba(252, 82, 0, 0.45);
       box-shadow: 0 0 0 4px rgba(252, 82, 0, 0.11);
       background: #ffffff;
+    }
+
+    html[data-theme="dark"] .input-row {
+      border-color: rgba(130, 192, 255, 0.16);
+      background: linear-gradient(180deg, rgba(11, 22, 38, 0.94), rgba(16, 31, 52, 0.9));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    html[data-theme="dark"] .input-row:focus-within {
+      border-color: rgba(245, 158, 11, 0.34);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+      background: linear-gradient(180deg, rgba(13, 26, 45, 0.98), rgba(22, 39, 64, 0.94));
+    }
+
+    html[data-theme="dark"] .pace-input {
+      color: #f3f8ff;
+    }
+
+    html[data-theme="dark"] .pace-input::placeholder {
+      color: #7f97ba;
+    }
+
+    html[data-theme="dark"] .leading-icon,
+    html[data-theme="dark"] .reset-icon {
+      color: #7e96b8;
+    }
+
+    html[data-theme="dark"] .ghost-btn:hover {
+      background: rgba(77, 163, 255, 0.12);
     }
 
     .leading-icon,
@@ -346,6 +418,7 @@
 
     .pace-input {
       width: 100%;
+      min-width: 0;
       border: 0;
       outline: 0;
       background: transparent;
@@ -444,6 +517,59 @@
     .helper {
       font-size: 0.875rem;
       color: var(--muted);
+    }
+
+    .recent-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .recent-wrap:empty {
+      display: none;
+    }
+
+    .recent-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted-light);
+    }
+
+    .recent-chip {
+      border: 1px solid rgba(252, 82, 0, 0.12);
+      background: rgba(255, 255, 255, 0.72);
+      color: #7a4a2d;
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .recent-chip:hover {
+      background: rgba(255, 241, 231, 0.96);
+      transform: translateY(-1px);
+      border-color: rgba(252, 82, 0, 0.2);
+    }
+
+    .recent-clear {
+      margin-left: auto;
+      border: 1px solid rgba(252, 82, 0, 0.12);
+      background: transparent;
+      color: var(--muted-light);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.76rem;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .recent-clear:hover {
+      background: rgba(255, 241, 231, 0.96);
+      color: var(--accent-strong);
+      border-color: rgba(252, 82, 0, 0.22);
     }
 
     .results {
@@ -740,6 +866,38 @@
       color: #a95322;
     }
 
+    html[data-theme="dark"] .unit-pill {
+      border-color: rgba(245, 158, 11, 0.18);
+      background: rgba(20, 34, 55, 0.88);
+      color: #d9e8ff;
+    }
+
+    html[data-theme="dark"] .unit-pill:hover {
+      background: rgba(28, 46, 74, 0.96);
+      color: #f8fbff;
+    }
+
+    html[data-theme="dark"] .unit-pill.is-active {
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.92), rgba(180, 83, 9, 0.95));
+      color: #fff8ec;
+      border-color: rgba(245, 158, 11, 0.52);
+      box-shadow: 0 12px 24px rgba(180, 83, 9, 0.24);
+    }
+
+    html[data-theme="dark"] .result-card.is-active-unit {
+      border-color: rgba(245, 158, 11, 0.34);
+      background: linear-gradient(180deg, rgba(23, 37, 61, 0.98), rgba(53, 30, 9, 0.86));
+      box-shadow: 0 18px 34px rgba(180, 83, 9, 0.16);
+    }
+
+    html[data-theme="dark"] .result-card.is-active-unit .result-label {
+      color: #f6b34d;
+    }
+
+    html[data-theme="dark"] .result-card.is-active-unit .result-suffix {
+      color: #f2c47a;
+    }
+
     .result-label {
       margin-bottom: 8px;
       font-size: 0.75rem;
@@ -759,7 +917,7 @@
       font-size: clamp(1.5rem, 4vw, 1.875rem);
       font-weight: 600;
       letter-spacing: -0.03em;
-      color: #1f1712;
+      color: var(--text);
       word-break: break-word;
     }
 
@@ -776,12 +934,16 @@
       margin-top: 4px;
       border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(255, 244, 237, 0.78));
+      background: linear-gradient(180deg, color-mix(in srgb, var(--card-solid) 94%, white), color-mix(in srgb, var(--card-solid) 78%, var(--bg)));
       box-shadow: 0 18px 40px rgba(143, 63, 18, 0.07);
       overflow: hidden;
       opacity: 0;
       transform: translateY(14px);
       animation: fadeUp 0.35s ease 0.1s forwards;
+    }
+
+    .projection-panel.is-animating {
+      overflow: clip;
     }
 
     .projection-summary {
@@ -792,6 +954,10 @@
       gap: 16px;
       padding: 18px 20px;
       cursor: pointer;
+    }
+
+    .projection-summary:focus-visible {
+      outline: none;
     }
 
     .projection-summary::-webkit-details-marker {
@@ -842,7 +1008,7 @@
       border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 18px;
       padding: 16px;
-      background: rgba(255, 255, 255, 0.9);
+      background: color-mix(in srgb, var(--card-solid) 90%, transparent);
       min-height: 100px;
       display: flex;
       flex-direction: column;
@@ -880,7 +1046,7 @@
       border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 18px;
       padding: 16px;
-      background: rgba(255, 255, 255, 0.9);
+      background: color-mix(in srgb, var(--card-solid) 90%, transparent);
       min-height: 110px;
       display: flex;
       flex-direction: column;
@@ -937,7 +1103,7 @@
       font-size: clamp(1.25rem, 3vw, 1.6rem);
       font-weight: 600;
       letter-spacing: -0.03em;
-      color: #8f3f12;
+      color: var(--accent-strong);
     }
 
     .projection-meta {
@@ -991,6 +1157,50 @@
       gap: 16px;
     }
 
+    .training-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .training-card {
+      border: 1px solid rgba(236, 220, 207, 0.95);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 108px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .training-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 34px rgba(252, 82, 0, 0.08);
+      background: linear-gradient(180deg, #ffffff, #fff8f4);
+    }
+
+    .training-label {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #bc8f73;
+    }
+
+    .training-pace {
+      font-size: clamp(1.15rem, 2.8vw, 1.45rem);
+      font-weight: 600;
+      color: #8f3f12;
+      letter-spacing: -0.03em;
+    }
+
+    .training-meta {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
     .table-toolbar {
       display: flex;
       align-items: center;
@@ -1007,8 +1217,13 @@
       border-radius: 999px;
       border: 1px solid rgba(252, 82, 0, 0.14);
       background: rgba(255, 247, 240, 0.86);
-      color: #7a4a2d;
+      color: var(--text);
       font-size: 0.88rem;
+    }
+
+    html[data-theme="dark"] .mini-input,
+    html[data-theme="dark"] .mini-input input {
+      color: #0f2744;
     }
 
     .mini-input input {
@@ -1028,7 +1243,7 @@
       padding: 12px 14px;
       border-radius: 18px;
       border: 1px solid rgba(252, 82, 0, 0.14);
-      background: rgba(255, 247, 240, 0.86);
+      background: color-mix(in srgb, var(--card-solid) 86%, transparent);
     }
 
     .slider-header {
@@ -1037,7 +1252,7 @@
       justify-content: space-between;
       gap: 12px;
       font-size: 0.88rem;
-      color: #7a4a2d;
+      color: var(--text);
     }
 
     .slider-label {
@@ -1067,12 +1282,16 @@
     .toggle-btn {
       border: 1px solid rgba(252, 82, 0, 0.14);
       background: rgba(255, 247, 240, 0.82);
-      color: #7a4a2d;
+      color: var(--text);
       border-radius: 999px;
       padding: 8px 14px;
       font-size: 0.88rem;
       cursor: pointer;
       transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    html[data-theme="dark"] .toggle-btn {
+      color: #0f2744;
     }
 
     .toggle-btn:hover {
@@ -1087,11 +1306,20 @@
       box-shadow: 0 12px 28px rgba(194, 65, 12, 0.18);
     }
 
+    html[data-theme="dark"] .toggle-btn.is-active {
+      color: #0f2744;
+    }
+
+    html[data-theme="dark"] .toggle-btn.is-active,
+    html[data-theme="dark"] .toggle-btn.is-active span {
+      color: #0f2744;
+    }
+
     .table-wrap {
       overflow-x: auto;
       border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.92);
+      background: color-mix(in srgb, var(--card-solid) 92%, transparent);
       box-shadow: 0 16px 34px rgba(143, 63, 18, 0.05);
     }
 
@@ -1118,8 +1346,8 @@
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: #9a755f;
-      background: rgba(255, 248, 243, 0.9);
+      color: var(--muted-light);
+      background: color-mix(in srgb, var(--card-solid) 90%, transparent);
       font-weight: 600;
     }
 
@@ -1158,6 +1386,34 @@
       gap: 16px;
       font-size: 0.875rem;
       color: var(--muted-light);
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(252, 82, 0, 0.14);
+      background: rgba(255, 247, 240, 0.82);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+      background: color-mix(in srgb, var(--accent-soft) 72%, var(--card-solid));
+      border-color: color-mix(in srgb, var(--accent) 28%, var(--border));
+    }
+
+    .theme-toggle-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+      box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 10%, transparent);
     }
 
     .footer-right {
@@ -1249,7 +1505,8 @@
       }
 
       .results,
-      .projection-content {
+      .projection-content,
+      .training-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1309,6 +1566,7 @@
             <button id="clearBtn" class="ghost-btn" aria-label="Clear input">
               <span class="reset-icon">⟲</span>
             </button>
+            <button class="utility-btn" id="shareSetupBtn" type="button">Share</button>
           </div>
 
           <div class="unit-rail" id="unitRail">
@@ -1321,6 +1579,7 @@
           </div>
 
           <div class="helper" id="helperText"></div>
+          <div class="recent-wrap" id="recentWrap"></div>
         </div>
       </div>
     </div>
@@ -1411,6 +1670,19 @@
       </div>
     </details>
 
+    <details class="projection-panel vdot-panel" id="trainingPanel">
+      <summary class="projection-summary">
+        <div class="projection-copy">
+          <div class="projection-eyebrow">Training Paces</div>
+          <div class="projection-subtitle" id="trainingSubtitle">VDOT-based training pace bands for everyday workouts.</div>
+        </div>
+        <span class="panel-chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="section-body" id="trainingContent">
+        <div class="projection-empty">Enter a valid pace or speed to unlock training paces.</div>
+      </div>
+    </details>
+
     <details class="projection-panel vdot-panel" id="gapPanel">
       <summary class="projection-summary">
         <div class="projection-copy">
@@ -1463,7 +1735,10 @@
     </details>
 
     <div class="footer">
-      <div>Click any result to copy it.</div>
+      <button class="theme-toggle" id="themeToggleBtn" type="button" aria-pressed="false">
+        <span class="theme-toggle-dot" aria-hidden="true"></span>
+        <span id="themeToggleLabel">Dark mode</span>
+      </button>
       <div class="footer-right">
         <span id="copiedState">Made by</span>
         <a class="footer-link" href="https://github.com/MathBunny/mypace-run" target="_blank" rel="noreferrer">
@@ -1498,7 +1773,11 @@
     const input = document.getElementById("paceInput");
     const helperText = document.getElementById("helperText");
     const copiedState = document.getElementById("copiedState");
+    const themeToggleBtn = document.getElementById("themeToggleBtn");
+    const themeToggleLabel = document.getElementById("themeToggleLabel");
     const clearBtn = document.getElementById("clearBtn");
+    const shareSetupBtn = document.getElementById("shareSetupBtn");
+    const recentWrap = document.getElementById("recentWrap");
     const unitRail = document.getElementById("unitRail");
     const sectionDivider = document.getElementById("sectionDivider");
     const dividerGame = document.getElementById("dividerGame");
@@ -1511,6 +1790,8 @@
     const projectionSubtitle = document.getElementById("projectionSubtitle");
     const vdotContent = document.getElementById("vdotContent");
     const vdotSubtitle = document.getElementById("vdotSubtitle");
+    const trainingSubtitle = document.getElementById("trainingSubtitle");
+    const trainingContent = document.getElementById("trainingContent");
     const gapSubtitle = document.getElementById("gapSubtitle");
     const gapGradeInput = document.getElementById("gapGradeInput");
     const gapPresetRow = document.getElementById("gapPresetRow");
@@ -1525,6 +1806,8 @@
     let selectedVdotRace = "5K";
     let selectedSplitRace = "5K";
     let hasAutoSelectedInput = false;
+    let recentEntries = [];
+    let currentTheme = "light";
     const dividerGameState = {
       active: false,
       rafId: 0,
@@ -1546,9 +1829,193 @@
       mph: document.getElementById("value-mph"),
     };
 
+    const TRAINING_BANDS = [
+      { label: "Easy", low: 0.59, high: 0.74, note: "Comfortable aerobic running and recovery miles." },
+      { label: "Marathon", low: 0.75, high: 0.84, note: "Steady long-effort rhythm for marathon-specific work." },
+      { label: "Threshold", low: 0.83, high: 0.88, note: "Controlled tempo effort you can hold without fading." },
+      { label: "Interval", low: 0.97, high: 1.0, note: "VO2-focused reps with strong but repeatable effort." },
+      { label: "Repetition", low: 1.05, high: 1.1, note: "Fast relaxed work for economy, turnover, and form." },
+    ];
+
+    const DETAILS_PANELS = [
+      "projectionPanel",
+      "vdotPanel",
+      "trainingPanel",
+      "gapPanel",
+      "splitsPanel",
+    ].map((id) => document.getElementById(id)).filter(Boolean);
+
     function round(value, digits = 2) {
       const factor = 10 ** digits;
       return Math.round(value * factor) / factor;
+    }
+
+    function applyTheme(theme) {
+      currentTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", currentTheme);
+      themeToggleBtn.setAttribute("aria-pressed", String(currentTheme === "dark"));
+      themeToggleLabel.textContent = currentTheme === "dark" ? "Light mode" : "Dark mode";
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {
+        themeMeta.setAttribute("content", currentTheme === "dark" ? "#07111f" : "#fafafa");
+      }
+      try {
+        window.localStorage.setItem("mypaceTheme", currentTheme);
+      } catch {}
+    }
+
+    function loadThemePreference() {
+      try {
+        const storedTheme = window.localStorage.getItem("mypaceTheme");
+        if (storedTheme === "dark" || storedTheme === "light") {
+          applyTheme(storedTheme);
+          return;
+        }
+      } catch {}
+      applyTheme("light");
+    }
+
+    function triggerLightHaptic() {
+      if (typeof navigator.vibrate === "function") {
+        navigator.vibrate(12);
+      }
+    }
+
+    function inverseOxygenCost(targetCost) {
+      const a = 0.000104;
+      const b = 0.182258;
+      const c = -4.6 - targetCost;
+      const discriminant = b * b - 4 * a * c;
+      if (discriminant <= 0) return null;
+      return (-b + Math.sqrt(discriminant)) / (2 * a);
+    }
+
+    function velocityToMinPerKm(velocityMetersPerMinute) {
+      if (!isFinite(velocityMetersPerMinute) || velocityMetersPerMinute <= 0) return null;
+      return 1000 / velocityMetersPerMinute;
+    }
+
+    function formatPaceBand(lowMinPerKm, highMinPerKm, system) {
+      if (!lowMinPerKm || !highMinPerKm) return "—";
+      const faster = system === "imperial" ? lowMinPerKm * 1.609344 : lowMinPerKm;
+      const slower = system === "imperial" ? highMinPerKm * 1.609344 : highMinPerKm;
+      const unitLabel = system === "imperial" ? "/mi" : "/km";
+      return `${decimalMinutesToPace(faster)}-${decimalMinutesToPace(slower)} ${unitLabel}`;
+    }
+
+    function buildShareUrl() {
+      const url = new URL(window.location.href);
+      url.search = "";
+      const params = url.searchParams;
+      if (input.value.trim()) {
+        params.set("value", sanitizeNumericInput(input.value.trim()));
+      }
+      params.set("unit", currentInputType);
+      params.set("vdotRace", selectedVdotRace);
+      params.set("splitRace", selectedSplitRace);
+      params.set("splitBias", String(splitBiasInput.value));
+      params.set("grade", String(gapGradeInput.value));
+      return url.toString();
+    }
+
+    function loadRecentEntries() {
+      try {
+        recentEntries = JSON.parse(window.localStorage.getItem("mypaceRecentEntries") || "[]");
+        if (!Array.isArray(recentEntries)) recentEntries = [];
+      } catch {
+        recentEntries = [];
+      }
+    }
+
+    function persistRecentEntries() {
+      try {
+        window.localStorage.setItem("mypaceRecentEntries", JSON.stringify(recentEntries.slice(0, 5)));
+      } catch {}
+    }
+
+    function renderRecentEntries() {
+      recentWrap.innerHTML = "";
+      if (!recentEntries.length) return;
+
+      const label = document.createElement("span");
+      label.className = "recent-label";
+      label.textContent = "Recent";
+      recentWrap.appendChild(label);
+
+      recentEntries.forEach((entry) => {
+        const button = document.createElement("button");
+        button.className = "recent-chip";
+        button.type = "button";
+        button.textContent = entry.value;
+        button.addEventListener("click", () => {
+          input.value = entry.value;
+          currentInputType = entry.unit;
+          render();
+          if (shouldRefocusInputAfterUnitChange()) {
+            input.focus();
+          }
+        });
+        recentWrap.appendChild(button);
+      });
+
+      const clearButton = document.createElement("button");
+      clearButton.className = "recent-clear";
+      clearButton.type = "button";
+      clearButton.textContent = "Clear";
+      clearButton.addEventListener("click", () => {
+        recentEntries = [];
+        persistRecentEntries();
+        renderRecentEntries();
+      });
+      recentWrap.appendChild(clearButton);
+    }
+
+    function saveRecentEntry(parsed) {
+      if (!parsed || !input.value.trim()) return;
+      const entry = {
+        value: sanitizeNumericInput(input.value.trim()),
+        unit: currentInputType,
+      };
+      if (!entry.value) return;
+      if (entry.value === "5:30" && entry.unit === "minPerKm") return;
+      recentEntries = recentEntries.filter((item) => item.value !== entry.value);
+      recentEntries.unshift(entry);
+      recentEntries = recentEntries.slice(0, 5);
+      persistRecentEntries();
+      renderRecentEntries();
+    }
+
+    function animateDetails(details, opening) {
+      const content = details.querySelector(".projection-content, .section-body");
+      const summary = details.querySelector(".projection-summary");
+      if (!content || !summary || details.dataset.animating === "true") return;
+
+      const startHeight = details.offsetHeight;
+      if (opening) {
+        details.open = true;
+      }
+      const endHeight = summary.offsetHeight + content.offsetHeight;
+
+      details.dataset.animating = "true";
+      details.classList.add("is-animating");
+      details.style.height = `${startHeight}px`;
+      details.style.overflow = "hidden";
+
+      requestAnimationFrame(() => {
+        details.style.transition = "height 240ms ease";
+        details.style.height = `${opening ? endHeight : summary.offsetHeight}px`;
+      });
+
+      window.setTimeout(() => {
+        if (!opening) {
+          details.open = false;
+        }
+        details.style.height = "";
+        details.style.transition = "";
+        details.style.overflow = "";
+        details.dataset.animating = "false";
+        details.classList.remove("is-animating");
+      }, 260);
     }
 
     function getInputTypeLabel(type = currentInputType) {
@@ -1937,6 +2404,38 @@
       });
     }
 
+    function renderTrainingPaces(results) {
+      if (!results) {
+        trainingSubtitle.textContent = "VDOT-based training pace bands for everyday workouts.";
+        trainingContent.innerHTML = '<div class="projection-empty">Enter a valid pace or speed to unlock training paces.</div>';
+        return;
+      }
+
+      const selectedRace = RACES.find((race) => race.label === selectedVdotRace) || RACES[0];
+      const selectedTimeMinutes = results.minPerKm * selectedRace.distanceKm;
+      const vdot = calculateVdot(selectedRace.distanceKm * 1000, selectedTimeMinutes);
+      const preferredSystem = getPreferredSystem(currentInputType);
+
+      trainingSubtitle.textContent = `Guided by VDOT ${round(vdot, 1)} using ${selectedRace.label} as the current basis.`;
+      trainingContent.innerHTML = `
+        <div class="training-grid">
+          ${TRAINING_BANDS.map((band) => {
+            const lowVelocity = inverseOxygenCost(vdot * band.high);
+            const highVelocity = inverseOxygenCost(vdot * band.low);
+            const fastMinPerKm = velocityToMinPerKm(lowVelocity);
+            const slowMinPerKm = velocityToMinPerKm(highVelocity);
+            return `
+              <div class="training-card">
+                <div class="training-label">${band.label}</div>
+                <div class="training-pace">${formatPaceBand(fastMinPerKm, slowMinPerKm, preferredSystem)}</div>
+                <div class="training-meta">${band.note}</div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
     function renderGapPresets() {
       gapPresetRow.innerHTML = GAP_PRESETS.map((value) => `
         <button class="toggle-btn${Number(gapGradeInput.value) === value ? " is-active" : ""}" type="button" data-gap-preset="${value}">
@@ -2240,6 +2739,7 @@
 
       try {
         await navigator.clipboard.writeText(text);
+        triggerLightHaptic();
         setCopiedState(`Copied ${text}`);
         showCopyFeedback(trigger, feedbackOptions);
       } catch {
@@ -2262,6 +2762,7 @@
       refreshActiveResultCard();
       renderProjections(results);
       renderVdotPanel(results);
+      renderTrainingPaces(results);
       renderGapTable(results);
       renderSplitsTable(results);
 
@@ -2301,12 +2802,41 @@
       if (seededValue) {
         input.value = sanitizeNumericInput(seededValue);
       }
+      const seededUnit = params.get("unit");
+      if (seededUnit && ["minPerKm", "minPerMile", "kmh", "mph"].includes(seededUnit)) {
+        currentInputType = seededUnit;
+      }
+      const seededVdotRace = params.get("vdotRace");
+      if (seededVdotRace && RACES.some((race) => race.label === seededVdotRace)) {
+        selectedVdotRace = seededVdotRace;
+      }
+      const seededSplitRace = params.get("splitRace");
+      if (seededSplitRace && RACES.some((race) => race.label === seededSplitRace)) {
+        selectedSplitRace = seededSplitRace;
+      }
+      const seededSplitBias = params.get("splitBias");
+      if (seededSplitBias !== null) {
+        splitBiasInput.value = String(clamp(Number(seededSplitBias) || 0, -20, 20));
+      }
+      const seededGrade = params.get("grade");
+      if (seededGrade !== null) {
+        gapGradeInput.value = String(clamp(Number(seededGrade) || 0, -15, 15));
+      }
     }
 
     clearBtn.addEventListener("click", () => {
       input.value = "";
       render();
       input.focus();
+    });
+
+    themeToggleBtn.addEventListener("click", () => {
+      applyTheme(currentTheme === "dark" ? "light" : "dark");
+    });
+
+    shareSetupBtn.addEventListener("click", async () => {
+      const shareUrl = buildShareUrl();
+      await copyText(shareUrl, shareSetupBtn, { copiedLabel: "Copied link" });
     });
 
     input.addEventListener("focus", () => {
@@ -2332,6 +2862,10 @@
     });
 
     input.addEventListener("input", render);
+    input.addEventListener("blur", () => {
+      const parsed = parsePaceLike(input.value, currentInputType);
+      saveRecentEntry(parsed);
+    });
     input.addEventListener("keydown", (event) => {
       if (event.key !== "Tab") return;
 
@@ -2360,6 +2894,18 @@
       });
     });
 
+    DETAILS_PANELS.forEach((details) => {
+      const summary = details.querySelector(".projection-summary");
+      if (!summary) return;
+      summary.addEventListener("click", (event) => {
+        event.preventDefault();
+        animateDetails(details, !details.open);
+      });
+    });
+
+    loadThemePreference();
+    loadRecentEntries();
+    renderRecentEntries();
     hydrateInputFromQuery();
     render();
     window.requestAnimationFrame(() => {

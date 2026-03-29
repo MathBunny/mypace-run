@@ -56,15 +56,27 @@
       --shadow: 0 18px 60px rgba(143, 63, 18, 0.09);
     }
 
+    html[data-theme="dark"] {
+      --bg: #07111f;
+      --card: rgba(12, 23, 40, 0.94);
+      --border: #233650;
+      --text: #edf4ff;
+      --muted: #9bb0cc;
+      --muted-light: #6f88ab;
+      --accent: #4da3ff;
+      --accent-strong: #82c0ff;
+      --shadow: 0 24px 60px rgba(0, 5, 18, 0.38);
+    }
+
     * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
       padding: 0;
       background:
-        radial-gradient(circle at top left, rgba(252, 82, 0, 0.08), transparent 34%),
-        radial-gradient(circle at top right, rgba(255, 212, 191, 0.28), transparent 28%),
-        linear-gradient(180deg, #fffdfa 0%, #f8f1ea 100%);
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 14%, transparent), transparent 34%),
+        radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 10%, transparent), transparent 28%),
+        linear-gradient(180deg, color-mix(in srgb, var(--bg) 65%, white) 0%, var(--bg) 100%);
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -105,7 +117,7 @@
       line-height: 0.98;
       letter-spacing: -0.04em;
       font-weight: 650;
-      color: #201713;
+      color: var(--text);
       max-width: 42rem;
     }
 
@@ -114,7 +126,7 @@
       max-width: 40rem;
       font-size: 1.06rem;
       line-height: 1.8;
-      color: #6f6158;
+      color: var(--muted);
     }
 
     .card {
@@ -122,7 +134,7 @@
       padding: 26px;
       border: 1px solid rgba(236, 220, 207, 0.95);
       border-radius: 28px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 243, 0.96));
+      background: linear-gradient(180deg, color-mix(in srgb, var(--card) 94%, white), color-mix(in srgb, var(--card) 88%, var(--bg)));
       box-shadow: var(--shadow);
     }
 
@@ -162,7 +174,7 @@
       padding: 18px;
       border-radius: 20px;
       border: 1px solid rgba(236, 220, 207, 0.95);
-      background: rgba(255, 255, 255, 0.88);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
     }
 
     .mini-title {
@@ -170,7 +182,7 @@
       font-size: 0.82rem;
       text-transform: uppercase;
       letter-spacing: 0.14em;
-      color: #9a755f;
+      color: var(--muted-light);
     }
 
     .mini-copy {
@@ -184,11 +196,37 @@
       margin-top: 32px;
       display: flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: space-between;
       gap: 6px;
       flex-wrap: wrap;
       font-size: 0.875rem;
       color: var(--muted-light);
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(252, 82, 0, 0.14);
+      background: rgba(255, 247, 240, 0.82);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+      box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 10%, transparent);
     }
 
     .footer-link {
@@ -259,16 +297,58 @@
     </section>
 
     <footer class="footer">
-      <span>Made by</span>
-      <a class="footer-link" href="https://github.com/MathBunny/mypace-run" target="_blank" rel="noreferrer">
-        <span>Horatiu Lazu</span>
-        <span class="footer-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true">
-            <path d="M12 1.5C6.2 1.5 1.5 6.3 1.5 12.2c0 4.7 3 8.7 7.2 10.1.5.1.7-.2.7-.5v-2c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.1-1.6-1.1-1.6-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.5 2.4 1.1 3 .8.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.2 0-1.2.4-2.2 1-3-.1-.3-.4-1.4.1-2.8 0 0 .9-.3 3 .9a10.1 10.1 0 0 1 5.4 0c2.1-1.2 3-.9 3-.9.5 1.4.2 2.5.1 2.8.7.8 1 1.8 1 3 0 4-2.4 4.9-4.7 5.2.4.3.7 1 .7 2v3c0 .3.2.6.7.5a10.7 10.7 0 0 0 7.2-10.1C22.5 6.3 17.8 1.5 12 1.5Z" />
-          </svg>
-        </span>
-      </a>
+      <button class="theme-toggle" id="themeToggleBtn" type="button" aria-pressed="false">
+        <span class="theme-toggle-dot" aria-hidden="true"></span>
+        <span id="themeToggleLabel">Dark mode</span>
+      </button>
+      <div>
+        <span>Made by</span>
+        <a class="footer-link" href="https://github.com/MathBunny/mypace-run" target="_blank" rel="noreferrer">
+          <span>Horatiu Lazu</span>
+          <span class="footer-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true">
+              <path d="M12 1.5C6.2 1.5 1.5 6.3 1.5 12.2c0 4.7 3 8.7 7.2 10.1.5.1.7-.2.7-.5v-2c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.1-1.6-1.1-1.6-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.5 2.4 1.1 3 .8.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.2 0-1.2.4-2.2 1-3-.1-.3-.4-1.4.1-2.8 0 0 .9-.3 3 .9a10.1 10.1 0 0 1 5.4 0c2.1-1.2 3-.9 3-.9.5 1.4.2 2.5.1 2.8.7.8 1 1.8 1 3 0 4-2.4 4.9-4.7 5.2.4.3.7 1 .7 2v3c0 .3.2.6.7.5a10.7 10.7 0 0 0 7.2-10.1C22.5 6.3 17.8 1.5 12 1.5Z" />
+            </svg>
+          </span>
+        </a>
+      </div>
     </footer>
   </main>
+  <script>
+    const themeToggleBtn = document.getElementById("themeToggleBtn");
+    const themeToggleLabel = document.getElementById("themeToggleLabel");
+
+    function applyTheme(theme) {
+      const currentTheme = theme === "dark" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", currentTheme);
+      themeToggleBtn.setAttribute("aria-pressed", String(currentTheme === "dark"));
+      themeToggleLabel.textContent = currentTheme === "dark" ? "Light mode" : "Dark mode";
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {
+        themeMeta.setAttribute("content", currentTheme === "dark" ? "#07111f" : "#fafafa");
+      }
+      try {
+        window.localStorage.setItem("mypaceTheme", currentTheme);
+      } catch {}
+    }
+
+    function loadThemePreference() {
+      try {
+        const storedTheme = window.localStorage.getItem("mypaceTheme");
+        if (storedTheme === "dark" || storedTheme === "light") {
+          applyTheme(storedTheme);
+          return;
+        }
+      } catch {}
+      applyTheme("light");
+    }
+
+    themeToggleBtn.addEventListener("click", () => {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      applyTheme(isDark ? "light" : "dark");
+    });
+
+    loadThemePreference();
+  </script>
 </body>
 </html>
