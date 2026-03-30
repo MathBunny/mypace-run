@@ -513,7 +513,7 @@
         3.6;
 
       if (!isFinite(gradeCost) || gradeCost <= 0) return null;
-      return minPerKm * (flatCost / gradeCost);
+      return minPerKm * (gradeCost / flatCost);
     }
 
     function getSplitBiasLabel(bias) {
@@ -781,7 +781,7 @@
     function renderGapTable(results) {
       if (!results) {
         renderGapPresets();
-        gapSubtitle.textContent = "Adjust the grade to see the equivalent flat pace across units.";
+        gapSubtitle.textContent = "Adjust the grade to see the pace needed on that slope to match your current effort.";
         gapTableWrap.innerHTML = '<div class="projection-empty">Enter a valid pace or speed to unlock grade-adjusted pacing.</div>';
         return;
       }
@@ -796,14 +796,14 @@
         return;
       }
 
-      gapSubtitle.textContent = `Equivalent flat pacing for a ${gradePercent > 0 ? "+" : ""}${gradePercent}% grade.`;
+      gapSubtitle.textContent = `Pacing needed on a ${gradePercent > 0 ? "+" : ""}${gradePercent}% grade to match your current flat effort.`;
       const rows = formatSpeedRows(adjustedMinPerKm);
       gapTableWrap.innerHTML = `
         <table class="data-table">
           <thead>
             <tr>
               <th>Unit</th>
-              <th>Adjusted Pace</th>
+              <th>Grade Pace</th>
             </tr>
           </thead>
           <tbody>
